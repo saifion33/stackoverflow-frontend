@@ -16,7 +16,7 @@ const Navbar = () => {
         }
     }
     return (
-        <nav className='flex  justify-center bg-white shadow w-full '>
+        <nav className='flex sticky top-0 left-0 z-50  justify-center bg-white shadow w-full '>
             <div className='flex relative items-center   gap-1 py-1 px-2 w-full max-w-7xl'>
                 <div role='button' className='text-2xl text-gray-700 sm:mr-2' onClick={() => setIsMenuOpen(p => !p)} >
                     {isMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
