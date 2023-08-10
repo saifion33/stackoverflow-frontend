@@ -1,6 +1,16 @@
+import Navbar from "./components/Navbar/Navbar"
+import {BrowserRouter as Router, Routes,Route} from 'react-router-dom'
 const App = () => {
   return (
-    <div className="text-4xl text-purple-600 text-center py-28" >This is Stackoverflow clone</div>
+    <main>
+      <Router>
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<div>Home</div>} />
+          <Route path="/questions" element={<div>Questions</div>} />
+        </Routes>
+      </Router>
+    </main>
   )
 }
 
