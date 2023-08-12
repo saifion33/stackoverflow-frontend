@@ -10,7 +10,7 @@ export default {
         customOrange:"#f48225"
       },
       screens:{
-        'md':'617px',
+        'xs':'617px',
         'md2':'817px'
       }
     },

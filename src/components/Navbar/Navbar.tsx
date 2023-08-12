@@ -3,22 +3,24 @@ import { useRef, useState } from 'react'
 import StackoverflowLogo from '../../assets/stackoverflow.svg'
 import StackoverflowIcon from '../../assets/stackoverflow-icon.svg'
 import NavContentBox from './NavContentBox'
+import { useLocation } from 'react-router-dom'
 const Navbar = () => {
-
+    const location=useLocation()
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isSearchBoxHidden, setIsSearchBoxHidden] = useState<boolean>(true)
     const searchRef = useRef<HTMLInputElement>(null)
-
+   
     const handleSearchBoxOpen = () => {
         setIsSearchBoxHidden(p => !p)
         if (!isSearchBoxHidden) {
             searchRef.current?.focus()
         }
     }
+    
     return (
         <nav className='flex sticky top-0 left-0 z-50  justify-center bg-white shadow w-full '>
             <div className='flex relative items-center   gap-1 py-1 px-2 w-full max-w-7xl'>
-                <div role='button' className='text-2xl text-gray-700 sm:mr-2' onClick={() => setIsMenuOpen(p => !p)} >
+                <div role='button' className={`text-2xl text-gray-700 sm:mr-2  ${(location.pathname==='/' || window.innerWidth<=640)?'block':'hidden'}`} onClick={() => setIsMenuOpen(p => !p)} >
                     {isMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
                 </div>
                 <div className='' >
@@ -45,7 +47,7 @@ const Navbar = () => {
                     <button className='py-1 px-2 rounded bg-blue-500 text-stone-50 whitespace-nowrap'>Sign up</button>
                 </div>
                 {
-                    isMenuOpen && <NavContentBox/>
+                    isMenuOpen && <NavContentBox onLinkClick={()=>setIsMenuOpen(false)} isOpenFromPage={false} />
                 }
             </div>
         </nav>
