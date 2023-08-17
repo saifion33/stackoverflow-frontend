@@ -16,9 +16,19 @@ export interface IUser{
     tags:string,
     imageUrl:string
 }
+
+// tag interface
 export interface ITags{
     name:string,
     description:string,
     questionAsked:number,
     id:string
+}
+
+// askQuestion interface
+
+export interface IAskQuestion{
+    title:string,
+    description:string
+    tags:string
 }

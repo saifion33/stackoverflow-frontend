@@ -6,6 +6,7 @@ import Login from "./pages/Login"
 import Users from "./pages/Users"
 import Tags from "./pages/Tags"
 import PageContainer from "./components/PageContainer"
+import AskQuestion from "./pages/AskQuestion"
 const App = () => {
   return (
     <main>
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
           <Route path="/questions" element={<div>Questions</div>} />
+          <Route path="/questions/ask" element={<AskQuestion/>} />
         </Routes>
       </Router>
     </main>
