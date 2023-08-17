@@ -7,6 +7,7 @@ import Users from "./pages/Users"
 import Tags from "./pages/Tags"
 import PageContainer from "./components/PageContainer"
 import AskQuestion from "./pages/AskQuestion"
+import Questions from "./pages/Questions"
 const App = () => {
   return (
     <main>
@@ -18,7 +19,7 @@ const App = () => {
           <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
-          <Route path="/questions" element={<div>Questions</div>} />
+          <Route path="/questions" element={<PageContainer><Questions/></PageContainer>} />
           <Route path="/questions/ask" element={<AskQuestion/>} />
         </Routes>
       </Router>

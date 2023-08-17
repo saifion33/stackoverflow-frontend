@@ -3,16 +3,14 @@ import { IUser } from '../Types'
 
 import { AiOutlineSearch } from 'react-icons/ai'
 import UserProfileCard from '../components/users/UserProfileCard'
+import { usersList } from '../utils/helpers'
 const Users = () => {
     const [users, setUsers] = useState<null | IUser[]>(null)
     const [isLoading, setIsLoading] = useState(false)
     const getUsers = () => {
         setIsLoading(true)
         setTimeout(() => {
-            setUsers([{ id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://placehold.jp/60x60.png' },
-            { id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://placehold.jp/60x60.png' },
-            { id: '3', displayName: 'iron man', location: 'usa', reputation: 596, tags: 'iron,al,go', imageUrl: 'https://placehold.jp/60x60.png' },
-            { id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://placehold.jp/60x60.png' }])
+            setUsers(usersList)
             setIsLoading(false);
         }, 1000);
     }

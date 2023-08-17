@@ -32,3 +32,13 @@ export interface IAskQuestion{
     description:string
     tags:string
 }
+
+// Question interface
+
+export interface IQuestion extends IAskQuestion{
+    id:string,
+    votes:number,
+    answers:number,
+    askedAt:string,
+    askedBy:IUser
+}
