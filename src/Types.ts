@@ -16,3 +16,9 @@ export interface IUser{
     tags:string,
     imageUrl:string
 }
+export interface ITags{
+    name:string,
+    description:string,
+    questionAsked:number,
+    id:string
+}

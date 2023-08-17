@@ -6,11 +6,12 @@ import promoImage from '../../assets/stackoverflow-sidebar-promo.svg'
 import CustomNavLink from './CustomNavlink'
 interface IProps{
     isOpenFromPage: boolean
-    onLinkClick?():void
+    onLinkClick?():void,
+   
 }
 const NavContentBox = ({isOpenFromPage,onLinkClick}:IProps) => {
     return (
-        <div className={` ${isOpenFromPage?'static shadow-none':'absolute shadow'} flex flex-col top-[50px] md:top-[60px] left-0 w-56 py-3 h-[85vh]  bg-white text-gray-500  gap-3`}>
+        <div className={` ${isOpenFromPage?'static shadow-none w-[170px] ':'absolute shadow w-[200px]'}  flex flex-col top-[50px] md:top-[60px] left-0  py-3 h-[85vh]  bg-white text-gray-500  gap-3`}>
             <CustomNavLink onOptionClick={onLinkClick} to='/' extraActiveStyle='pl-2' extraIdleStyle='pl-2' >Home</CustomNavLink>
             <div className='pl-2 w-full flex flex-col '>
                 <p className='text-gray-500  '>PUBLIC</p>

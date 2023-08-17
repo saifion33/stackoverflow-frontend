@@ -12,9 +12,7 @@ const Navbar = () => {
    
     const handleSearchBoxOpen = () => {
         setIsSearchBoxHidden(p => !p)
-        if (!isSearchBoxHidden) {
-            searchRef.current?.focus()
-        }
+        
     }
     
     return (
