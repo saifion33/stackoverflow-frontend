@@ -1,13 +1,14 @@
 import { answer, questions } from "../../utils/helpers"
 import QuestionDetailsCard from "./QuestionDetailsCard"
 import AnswerCard from "./AnswerCard"
+import WriteAnswer from "./WriteAnswer"
 
 
 const Question = () => {
   const question = questions[0]
   const { title, askedAt,answers } = question
   return (
-    <section>
+    <section className="">
       <header className="flex justify-between flex-wrap-reverse gap-2 py-3 border-b-2 mb-2">
         <div >
           <h1 className="text-3xl ">{title}</h1>
@@ -26,6 +27,9 @@ const Question = () => {
         </div>
         <AnswerCard Answer={answer} />
       </div>
+      <footer>
+        <WriteAnswer/>
+      </footer>
     </section>
   )
 }
