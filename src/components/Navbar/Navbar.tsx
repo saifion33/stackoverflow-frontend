@@ -35,7 +35,7 @@ const Navbar = () => {
                     <div className={`absolute sm:static top-12 ${isSearchBoxHidden ? 'hidden' : 'block'} sm:block sm:ml-auto left-0 bg-gray-100 sm:bg-transparent w-full max-w-sm lg:max-w-2xl p-2`}>
                         <div className='flex  w-full gap-3 border-[1px] group focus-within:border-blue-600 focus-within:outline-4 focus-within:outline outline-blue-100 border-gray-400 rounded bg-white items-center p-1' >
                             <AiOutlineSearch className="text-xl text-gray-500" />
-                            <input ref={searchRef} autoFocus className='w-full outline-none group-focus:outline-2' placeholder='Search...' type="text" />
+                            <input ref={searchRef}  className='w-full outline-none group-focus:outline-2' placeholder='Search...' type="text" />
                         </div>
 
                     </div>

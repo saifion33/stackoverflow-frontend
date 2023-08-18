@@ -42,3 +42,11 @@ export interface IQuestion extends IAskQuestion{
     askedAt:string,
     askedBy:IUser
 }
+
+export interface IAnswer {
+    answer:string
+    answerOf:string
+    answerBy:IUser
+    answerAt:string
+    votes:number
+}

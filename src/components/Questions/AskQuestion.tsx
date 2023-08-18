@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { IAskQuestion } from '../Types'
+import { IAskQuestion } from '../../Types'
 import * as yup from 'yup'
 
 const AskQuestion = () => {

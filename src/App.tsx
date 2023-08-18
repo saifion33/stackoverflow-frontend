@@ -6,8 +6,10 @@ import Login from "./pages/Login"
 import Users from "./pages/Users"
 import Tags from "./pages/Tags"
 import PageContainer from "./components/PageContainer"
-import AskQuestion from "./pages/AskQuestion"
+import AskQuestion from "./components/Questions/AskQuestion"
 import Questions from "./pages/Questions"
+import AllQuestions from "./components/Questions/AllQuestions"
+import Question from "./components/Questions/Question"
 const App = () => {
   return (
     <main>
@@ -19,8 +21,11 @@ const App = () => {
           <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
-          <Route path="/questions" element={<PageContainer><Questions/></PageContainer>} />
-          <Route path="/questions/ask" element={<AskQuestion/>} />
+          <Route path="/questions" element={<PageContainer><Questions /></PageContainer>} >
+            <Route path="/questions" element={<AllQuestions />} />
+            <Route path="/questions/:id" element={<Question />} />
+            <Route path="/questions/ask" element={<AskQuestion />} />
+          </Route>
         </Routes>
       </Router>
     </main>

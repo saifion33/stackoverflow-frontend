@@ -1,4 +1,4 @@
-import { IQuestion, ITags, IUser } from "../Types";
+import { IAnswer, IQuestion, ITags, IUser } from "../Types";
 
 export const usersList:IUser[]=[{ id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://placehold.jp/60x60.png' },
 { id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://placehold.jp/60x60.png' },
@@ -18,7 +18,7 @@ export const questions:IQuestion[]=[
         title:'How to create a function in javascript',
         description:"I'm trying to create a function in javascript please help me",
         tags:'javascript,es2015',
-        answers:0,
+        answers:1,
         askedAt:'Aug 9 at 9:50',
         votes:0,
         askedBy:{
@@ -31,6 +31,66 @@ export const questions:IQuestion[]=[
         description:"I'm trying to create a function in javascript please help me",
         tags:'javascript,es2015',
         answers:0,
+        askedAt:'Aug 9 at 9:50',
+        votes:0,
+        askedBy:{
+            ...usersList[0]
+        }
+    },
+    {
+        id:'2',
+        title:'How to create a function in javascript',
+        description:"I'm trying to create a function in javascript please help me",
+        tags:'javascript,es2015',
+        answers:0,
+        askedAt:'Aug 9 at 9:50',
+        votes:0,
+        askedBy:{
+            ...usersList[0]
+        }
+    },
+    {
+        id:'3',
+        title:'How to create a function in javascript',
+        description:"I'm trying to create a function in javascript please help me",
+        tags:'javascript,es2015',
+        answers:0,
+        askedAt:'Aug 9 at 9:50',
+        votes:0,
+        askedBy:{
+            ...usersList[0]
+        }
+    },
+    {
+        id:'4',
+        title:'How to create a function in javascript',
+        description:"I'm trying to create a function in javascript please help me",
+        tags:'javascript,es2015',
+        answers:0,
+        askedAt:'Aug 9 at 9:50',
+        votes:0,
+        askedBy:{
+            ...usersList[0]
+        }
+    },
+    {
+        id:'5',
+        title:'How to create a function in javascript',
+        description:"I'm trying to create a function in javascript please help me",
+        tags:'javascript,es2015',
+        answers:0,
+        askedAt:'Aug 9 at 9:50',
+        votes:0,
+        askedBy:{
+            ...usersList[0]
+        }
+    },
+    {
+        id:'6',
+        title:'How to create a function in javascript',
+        description:"I'm trying to create a function in javascript please help me",
+        tags:'javascript,es2015',
+        answers:0,
         askedAt:'Aug 10 at 9:50',
         votes:0,
         askedBy:{
@@ -38,3 +98,5 @@ export const questions:IQuestion[]=[
         }
     }
 ]
+
+export const answer:IAnswer={answer:'HI, define function in javascript like this function functionName(){//some code here}',answerAt:'Aug 10 at 9:50',answerBy:usersList[1],answerOf:'0',votes:0}
