@@ -10,6 +10,9 @@ import AskQuestion from "./components/Questions/AskQuestion"
 import Questions from "./pages/Questions"
 import AllQuestions from "./components/Questions/AllQuestions"
 import Question from "./components/Questions/Question"
+import UsersList from "./components/users/UsersList"
+import UserProfile from "./components/users/UserProfile"
+
 const App = () => {
   return (
     <main>
@@ -17,10 +20,13 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/users" element={<PageContainer><Users /></PageContainer>} />
-          <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
+          <Route path="/users" element={<PageContainer><Users /></PageContainer>} >
+            <Route path="/users" element={<UsersList/>}/>
+            <Route path="/users/:id" element={<UserProfile/>}/>
+          </Route>
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
+          <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
           <Route path="/questions" element={<PageContainer><Questions /></PageContainer>} >
             <Route path="/questions" element={<AllQuestions />} />
             <Route path="/questions/:id" element={<Question />} />

@@ -1,9 +1,9 @@
 import { IAnswer, IQuestion, ITags, IUser } from "../Types";
 
-export const usersList:IUser[]=[{ id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://placehold.jp/60x60.png' },
-{ id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://placehold.jp/60x60.png' },
-{ id: '3', displayName: 'iron man', location: 'usa', reputation: 596, tags: 'iron,al,go', imageUrl: 'https://placehold.jp/60x60.png' },
-{ id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://placehold.jp/60x60.png' }]
+export const usersList:IUser[]=[{ id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'full stack develper' },
+{ id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'MERN develper' },
+{ id: '3', displayName: 'iron man', location: 'usa', reputation: 596, tags: 'iron,al,go', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'python develper' },
+{ id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'exploring new planets and stars' }]
 
 export const tags:ITags[]=[
     {id:'1',name:'javascript',description:'For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant to your question: e.g., [node.js], [jQuery], [JSON], [ReactJS], [angular], [ember.js], [vue.js], [typescript], [svelte], etc. ',questionAsked:0},

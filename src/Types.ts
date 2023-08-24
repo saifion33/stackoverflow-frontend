@@ -11,10 +11,14 @@ export interface ISignupForm extends ILoginForm{
 export interface IUser{
     id:string,
     displayName:string,
+    about:string,
     location:string,
     reputation:number,
     tags:string,
-    imageUrl:string
+    imageUrl:string,
+    joinedOn:string,
+    questionCount:number,
+    answerCount:number,
 }
 
 // tag interface
