@@ -1,14 +1,15 @@
 import { usersList } from "../../utils/helpers"
 import { LiaBirthdayCakeSolid } from 'react-icons/lia'
-import { FaLocationDot } from 'react-icons/fa6'
+import { FaLocationDot, FaPen } from 'react-icons/fa6'
 import BadgeCard from "./BadgeCard"
 
 const UserProfile = () => {
     const user = usersList[1]
+    const isAdmin = true;
     return (
         <section>
-            <header>
-                <div className=" space-y-3 py-4">
+            <header className="flex justify-between py-4">
+                <div className=" space-y-3 ">
                     <img src={user.imageUrl} alt={user.displayName} />
                     <div>
                         <h1 className="text-3xl">{user.displayName}</h1>
@@ -20,6 +21,11 @@ const UserProfile = () => {
                         </div>
                     </div>
                 </div>
+                {
+                   isAdmin && <div>
+                        <button className="flex items-center gap-1 rounded border-[1px] px-2 py-1" > <FaPen /> Edit Profile</button>
+                    </div>
+                }
             </header>
             <div>
                 <div className="flex gap-8 flex-col-reverse sm:flex-row">

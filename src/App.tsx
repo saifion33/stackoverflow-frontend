@@ -12,6 +12,7 @@ import AllQuestions from "./components/Questions/AllQuestions"
 import Question from "./components/Questions/Question"
 import UsersList from "./components/users/UsersList"
 import UserProfile from "./components/users/UserProfile"
+import EditUserProfile from "./components/users/EditUserProfile"
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/users" element={<PageContainer><Users /></PageContainer>} >
             <Route path="/users" element={<UsersList/>}/>
             <Route path="/users/:id" element={<UserProfile/>}/>
+            <Route path="/users/edit/:id" element={<EditUserProfile/>}/>
           </Route>
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
