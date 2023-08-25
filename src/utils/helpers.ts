@@ -1,9 +1,10 @@
 import { IAnswer, IQuestion, ITags, IUser } from "../Types";
 
-export const usersList:IUser[]=[{ id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'full stack develper' },
-{ id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'MERN develper' },
-{ id: '3', displayName: 'iron man', location: 'usa', reputation: 596, tags: 'iron,al,go', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'python develper' },
-{ id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'exploring new planets and stars' }]
+export const usersList:IUser[]=[
+{ id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'full stack develper',badges:[{name:'Bronze',count:1,badgesList:['student']},{name:'Silver',count:0,badgesList:[]},{name:'Gold',count:0,badgesList:[]}] },
+{ id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'MERN develper',badges:[{name:'Bronze',count:1,badgesList:['student']},{name:'Silver',count:0,badgesList:[]},{name:'Gold',count:0,badgesList:[]}]},
+{ id: '3', displayName: 'iron man', location: 'usa', reputation: 596, tags: 'iron,al,go', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'python develper',badges:[{name:'Bronze',count:1,badgesList:['student']},{name:'Silver',count:0,badgesList:[]},{name:'Gold',count:0,badgesList:[]}] },
+{ id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://placehold.jp/60x60.png',joinedOn:'12/5/2023',answerCount:0,questionCount:0,about:'exploring new planets and stars',badges:[{name:'Bronze',count:1,badgesList:['student']},{name:'Silver',count:0,badgesList:[]},{name:'Gold',count:0,badgesList:[]}]  }]
 
 export const tags:ITags[]=[
     {id:'1',name:'javascript',description:'For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant to your question: e.g., [node.js], [jQuery], [JSON], [ReactJS], [angular], [ember.js], [vue.js], [typescript], [svelte], etc. ',questionAsked:0},
@@ -100,3 +101,9 @@ export const questions:IQuestion[]=[
 ]
 
 export const answer:IAnswer={answer:'HI, define function in javascript like this function functionName(){//some code here}',answerAt:'Aug 10 at 9:50',answerBy:usersList[1],answerOf:'0',votes:0}
+
+export const firstBadgeCriteria:{[key:string]:string}={
+    Bronze:'Ask a question that scrore 2 or more to earn your first Bronze badge',
+    Silver:'Ask a question that score 10 or more to earned your first Silver badge',
+    Gold:'Ask a question that score 20 or more to earned your first Gold badge'
+}    

@@ -19,6 +19,12 @@ export interface IUser{
     joinedOn:string,
     questionCount:number,
     answerCount:number,
+    badges:IBadge[]
+}
+export interface IBadge{
+    name:string
+    count:number,
+    badgesList:string[]
 }
 
 // tag interface
@@ -54,3 +60,4 @@ export interface IAnswer {
     answerAt:string
     votes:number
 }
+
