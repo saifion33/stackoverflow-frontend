@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { usersList } from "../../utils/helpers"
 import { object, string } from 'yup'
+import UpdateProfileImage from "./UpdateProfileImage"
 
 interface IUserForm {
     displayName: string,
@@ -10,13 +11,13 @@ interface IUserForm {
 }
 
 const EditUserProfile = () => {
-    const user = usersList[0]
+    const user = usersList[1]
 
     const initialValues = {
-        displayName: '',
-        about: '',
-        location: '',
-        tags: '',
+        displayName: user.displayName,
+        about: user.about,
+        location: user.location,
+        tags: user.tags,
     }
 
     const validationSchema = object({
@@ -29,9 +30,7 @@ const EditUserProfile = () => {
         <div>
             <h1 className="text-3xl my-4">Edit Your Profile</h1>
             <div className="border-[1px] rounded p-4">
-                <div className="image-container max-w-[128px]">
-                    <img className="w-full" src={user.imageUrl} alt={user.displayName} />
-                </div>
+                <UpdateProfileImage imageUrl={user.imageUrl} />
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} >
                     <Form>
                         <div className='my-3 space-y-2'>
