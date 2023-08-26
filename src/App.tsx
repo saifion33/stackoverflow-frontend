@@ -13,6 +13,8 @@ import Question from "./components/Questions/Question"
 import UsersList from "./components/users/UsersList"
 import UserProfile from "./components/users/UserProfile"
 import EditUserProfile from "./components/users/EditUserProfile"
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword"
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
           </Route>
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
+          <Route path="/users/account-recovery" element={<ForgotPassword/>} />
+          <Route path="/account/recover" element={<ResetPassword/>} />
           <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
           <Route path="/questions" element={<PageContainer><Questions /></PageContainer>} >
             <Route path="/questions" element={<AllQuestions />} />
