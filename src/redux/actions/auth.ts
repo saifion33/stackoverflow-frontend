@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { signUpUser } from '../../Api'
-import { ISignupForm, IUser } from '../../Types'
+import { logInUser, signUpUser } from '../../Api'
+import { ILoginForm, ISignupForm, IUser } from '../../Types'
 
-interface ISignupResponse {
+interface IResponse {
     status: number,
     message: string,
     user: {
@@ -13,5 +13,10 @@ interface ISignupResponse {
 
 export const signup = createAsyncThunk('/users/signup', async (data: ISignupForm) => {
     const response = await signUpUser(data)
-    return response.data as ISignupResponse
+    return response.data as IResponse
+})
+
+export const login=createAsyncThunk('/users/login', async (data: ILoginForm) => {
+    const response = await logInUser(data);
+    return response.data as IResponse
 })

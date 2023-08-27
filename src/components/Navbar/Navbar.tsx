@@ -3,22 +3,25 @@ import { useRef, useState } from 'react'
 import StackoverflowLogo from '../../assets/stackoverflow.svg'
 import StackoverflowIcon from '../../assets/stackoverflow-icon.svg'
 import NavContentBox from './NavContentBox'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../redux-hooks'
+import Avatar from '../users/Avatar'
+import { logout } from '../../redux/slice/authSlice'
 const Navbar = () => {
-    const location=useLocation()
+    const location = useLocation()
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
     const [isSearchBoxHidden, setIsSearchBoxHidden] = useState<boolean>(true)
     const searchRef = useRef<HTMLInputElement>(null)
-   
-    const handleSearchBoxOpen = () => {
-        setIsSearchBoxHidden(p => !p)
-        
-    }
-    
+    const navigate = useNavigate()
+    const user = useAppSelector(state => state.auth.user)
+    const dispatch=useAppDispatch()
+    const handleSearchBoxOpen = () => setIsSearchBoxHidden(p => !p)
+
+
     return (
         <nav className='flex sticky top-0 left-0 z-50  justify-center bg-white shadow w-full '>
             <div className='flex relative items-center   gap-1 py-1 px-2 w-full max-w-7xl'>
-                <div role='button' className={`text-2xl text-gray-700 sm:mr-2  ${(location.pathname==='/' || window.innerWidth<=640)?'block':'hidden'}`} onClick={() => setIsMenuOpen(p => !p)} >
+                <div role='button' className={`text-2xl text-gray-700 sm:mr-2  ${(location.pathname === '/' || window.innerWidth <= 640) ? 'block' : 'hidden'}`} onClick={() => setIsMenuOpen(p => !p)} >
                     {isMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
                 </div>
                 <div className='' >
@@ -35,17 +38,25 @@ const Navbar = () => {
                     <div className={`absolute sm:static top-12 ${isSearchBoxHidden ? 'hidden' : 'block'} sm:block sm:ml-auto left-0 bg-gray-100 sm:bg-transparent w-full max-w-sm lg:max-w-2xl p-2`}>
                         <div className='flex  w-full gap-3 border-[1px] group focus-within:border-blue-600 focus-within:outline-4 focus-within:outline outline-blue-100 border-gray-400 rounded bg-white items-center p-1' >
                             <AiOutlineSearch className="text-xl text-gray-500" />
-                            <input ref={searchRef}  className='w-full outline-none group-focus:outline-2' placeholder='Search...' type="text" />
+                            <input ref={searchRef} className='w-full outline-none group-focus:outline-2' placeholder='Search...' type="text" />
                         </div>
 
                     </div>
                 </div>
-                <div className='flex gap-2 '>
-                    <button className='py-1 px-2 rounded bg-blue-100 text-blue-700 whitespace-nowrap'>Log in</button>
-                    <button className='py-1 px-2 rounded bg-blue-500 text-stone-50 whitespace-nowrap'>Sign up</button>
-                </div>
                 {
-                    isMenuOpen && <NavContentBox onLinkClick={()=>setIsMenuOpen(false)} isOpenFromPage={false} />
+                    !user && <div className='flex gap-2 '>
+                        <button onClick={() => navigate('/users/login')} className='py-1 px-2 rounded bg-blue-100 text-blue-700 whitespace-nowrap'>Log in</button>
+                        <button onClick={() => navigate('/users/signup')} className='py-1 px-2 rounded bg-blue-500 text-stone-50 whitespace-nowrap'>Sign up</button>
+                    </div>
+                }
+                {
+                    user && <div className='flex gap-2 items-center'>
+                        <Avatar userName={user?.profile?.displayName || 'Unknown'} />
+                        <button onClick={()=>dispatch(logout())} className='px-3 py-[2px] border-2 border-blue-600 bg-blue-50 rounded '>Logout</button>
+                    </div>
+                }
+                {
+                    isMenuOpen && <NavContentBox onLinkClick={() => setIsMenuOpen(false)} isOpenFromPage={false} />
                 }
             </div>
         </nav>
