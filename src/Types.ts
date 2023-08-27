@@ -9,7 +9,7 @@ export interface ISignupForm extends ILoginForm{
 }
 // user interface
 export interface IUser{
-    id:string,
+    _id:string,
     displayName:string,
     about:string,
     location:string,
