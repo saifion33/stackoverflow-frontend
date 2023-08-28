@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { signup } from '../../redux/actions/auth'
 import loadingIcon from '../../assets/loading-icon.svg'
 import { useNavigate } from 'react-router-dom'
+import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 
 const SignupForm = () => {
     const dispatch = useAppDispatch()
@@ -16,8 +17,15 @@ const SignupForm = () => {
         password: ''
     }
     const handleSubmit = async(values: ISignupForm) => {
-        await dispatch(signup(values))
-        navigate('/')
+        const response=await dispatch(signup(values))
+        if (response.meta.requestStatus==='fulfilled') {
+            navigate('/')
+            return
+        }
+        const alertMessage=response.payload?.message
+        if (alertMessage) {
+            dispatch(showAlertWithTimeout({alertMessage,alertType:'error'}))
+        }
     }
     const passRegexp = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/
     const ValidationSchema = yup.object({

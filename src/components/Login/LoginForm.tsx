@@ -4,15 +4,29 @@ import * as yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import loadingIcon from '../../assets/loading-icon.svg'
 import { login } from '../../redux/actions/auth'
+import { useNavigate } from 'react-router-dom'
+import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
+
 const LoginForm = () => {
-    const isLoading = useAppSelector(state => state.auth.loading)
+
+    const { loading } = useAppSelector(state => state.auth)
+
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const initialValues = {
         email: '',
         password: ''
     }
     const handleSubmit = async (values: ILoginForm) => {
-        dispatch(login(values))
+        const request = await dispatch(login(values))
+        if (request.meta.requestStatus === 'fulfilled') {
+            navigate('/')
+            return
+        }
+            const alertMessage = request.payload?.message
+            if (alertMessage) {
+                dispatch(showAlertWithTimeout({ alertMessage, alertType: 'error'}))
+            }
     }
     const ValidationSchema = yup.object({
         email: yup.string().email('invalid email').required('email is required'),
@@ -21,7 +35,7 @@ const LoginForm = () => {
     return (
         <div>
             {
-                !isLoading && <Formik initialValues={initialValues} validationSchema={ValidationSchema} onSubmit={handleSubmit}>
+                !loading && <Formik initialValues={initialValues} validationSchema={ValidationSchema} onSubmit={handleSubmit}>
                     <Form className="bg-white shadow rounded-md p-3 drop-shadow" >
                         <div className='my-3'>
                             <label htmlFor="email">Email</label>
@@ -38,7 +52,7 @@ const LoginForm = () => {
                 </Formik>
             }
             {
-                isLoading && <div className='h-[231px]  w-full flex justify-center items-center shadow'>
+                loading && <div className='h-[231px]  w-full flex justify-center items-center shadow'>
                     <img src={loadingIcon} alt="loading icon" />
                 </div>
             }

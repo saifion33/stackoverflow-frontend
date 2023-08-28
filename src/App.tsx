@@ -16,11 +16,13 @@ import EditUserProfile from "./components/users/EditUserProfile"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from "./pages/ResetPassword"
 import { useAppSelector } from "./redux-hooks"
+import Alert from "./components/Alert/Alert"
 
 const App = () => {
   const user=useAppSelector(state=>state.auth.user)
   return (
     <main>
+      <Alert/>
       <Router>
         <Navbar />
         {user && <p>Now you are logged in</p>}

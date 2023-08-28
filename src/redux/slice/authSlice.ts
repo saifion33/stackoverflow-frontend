@@ -17,7 +17,7 @@ const storedUser = localStorage.getItem('user');
 
 const initialState: Istate = {
     loading: false,
-    user: storedUser?JSON.parse(storedUser):null,
+    user: storedUser ? JSON.parse(storedUser) : null,
     error: null
 }
 
@@ -43,21 +43,21 @@ const authSlice = createSlice({
         })
         builder.addCase(signup.rejected, (state, action) => {
             state.loading = false,
-                state.error = action.error.message || 'unknown error'
+            state.error = action.payload?.message || action.error.message || 'unknown error'
         })
         // **************** Login **************************************
-        builder.addCase(login.pending,(state)=>{
-            state.loading=true;
-            state.error=null;
+        builder.addCase(login.pending, (state) => {
+            state.loading = true;
+            state.error = null;
         })
-        builder.addCase(login.fulfilled,(state,action)=>{
-            state.loading=false;
-            state.user=action.payload.user
-            localStorage.setItem('user',JSON.stringify(action.payload.user))
+        builder.addCase(login.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = action.payload.user
+            localStorage.setItem('user', JSON.stringify(action.payload.user))
         })
-        builder.addCase(login.rejected,(state,action)=>{
-            state.loading=false;
-            state.error=action.error.message || 'unknown error'
+        builder.addCase(login.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload?.message || action.error.message || 'unknown error'
         })
     }
 })
