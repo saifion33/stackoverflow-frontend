@@ -38,8 +38,8 @@ const authSlice = createSlice({
         })
         builder.addCase(signup.fulfilled, (state, action) => {
             state.loading = false
-            state.user = action.payload.user
-            localStorage.setItem('user', JSON.stringify(action.payload.user))
+            state.user = action.payload.data
+            localStorage.setItem('user', JSON.stringify(action.payload.data))
         })
         builder.addCase(signup.rejected, (state, action) => {
             state.loading = false,
@@ -52,8 +52,8 @@ const authSlice = createSlice({
         })
         builder.addCase(login.fulfilled, (state, action) => {
             state.loading = false;
-            state.user = action.payload.user
-            localStorage.setItem('user', JSON.stringify(action.payload.user))
+            state.user = action.payload.data
+            localStorage.setItem('user', JSON.stringify(action.payload.data))
         })
         builder.addCase(login.rejected, (state, action) => {
             state.loading = false;

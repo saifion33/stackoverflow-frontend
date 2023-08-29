@@ -15,28 +15,24 @@ import UserProfile from "./components/users/UserProfile"
 import EditUserProfile from "./components/users/EditUserProfile"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from "./pages/ResetPassword"
-import { useAppSelector } from "./redux-hooks"
-import Alert from "./components/Alert/Alert"
 
 const App = () => {
-  const user=useAppSelector(state=>state.auth.user)
   return (
-    <main>
-      <Alert/>
+    <main >
       <Router>
         <Navbar />
-        {user && <p>Now you are logged in</p>}
+       
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<PageContainer><Users /></PageContainer>} >
-            <Route path="/users" element={<UsersList/>}/>
-            <Route path="/users/:id" element={<UserProfile/>}/>
-            <Route path="/users/edit/:id" element={<EditUserProfile/>}/>
+            <Route path="/users" element={<UsersList />} />
+            <Route path="/users/:id" element={<UserProfile />} />
+            <Route path="/users/edit/:id" element={<EditUserProfile />} />
           </Route>
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
-          <Route path="/users/account-recovery" element={<ForgotPassword/>} />
-          <Route path="/account/recover" element={<ResetPassword/>} />
+          <Route path="/users/account-recovery" element={<ForgotPassword />} />
+          <Route path="/account/recover" element={<ResetPassword />} />
           <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
           <Route path="/questions" element={<PageContainer><Questions /></PageContainer>} >
             <Route path="/questions" element={<AllQuestions />} />
@@ -45,6 +41,7 @@ const App = () => {
           </Route>
         </Routes>
       </Router>
+
     </main>
   )
 }

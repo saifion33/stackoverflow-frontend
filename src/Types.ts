@@ -1,63 +1,73 @@
 // login form interface
 export interface ILoginForm {
-    email:string,
-    password:string
+    email: string,
+    password: string
 }
 // signup form interface
-export interface ISignupForm extends ILoginForm{
+export interface ISignupForm extends ILoginForm {
     displayName: string,
 }
-// user interface
-export interface IUser{
-    _id:string,
-    displayName:string,
-    about:string,
-    location:string,
-    reputation:number,
-    tags:string,
-    imageUrl:string,
-    joinedOn:string,
-    questionCount:number,
-    answerCount:number,
-    badges:IBadge[]
+
+export interface IBasicUserDetails {
+    _id: string,
+    displayName: string,
+    about: string,
+    location: string,
+    reputation: number,
+    tags: string,
+    imageUrl: string,
 }
-export interface IBadge{
-    name:string
-    count:number,
-    badgesList:string[]
+
+// user interface
+export interface IUser extends IBasicUserDetails {
+    joinedOn: string,
+    questionCount: number,
+    answerCount: number,
+    badges: IBadge[]
+}
+
+
+export interface IBadge {
+    name: string
+    count: number,
+    badgesList: string[]
 }
 
 // tag interface
-export interface ITags{
-    name:string,
-    description:string,
-    questionAsked:number,
-    id:string
+export interface ITags {
+    name: string,
+    description: string,
+    questionAsked: number,
+    id: string
 }
 
 // askQuestion interface
 
-export interface IAskQuestion{
-    title:string,
-    description:string
-    tags:string
+export interface IAskQuestion {
+    title: string,
+    description: string
+    tags: string
 }
 
 // Question interface
 
-export interface IQuestion extends IAskQuestion{
-    id:string,
-    votes:number,
-    answers:number,
-    askedAt:string,
-    askedBy:IUser
+export interface IQuestion extends IAskQuestion {
+    id: string,
+    votes: number,
+    answers: number,
+    askedAt: string,
+    askedBy: IUser
 }
 
 export interface IAnswer {
-    answer:string
-    answerOf:string
-    answerBy:IUser
-    answerAt:string
-    votes:number
+    answer: string
+    answerOf: string
+    answerBy: IUser
+    answerAt: string
+    votes: number
 }
 
+export interface IServerResponse {
+    status: number,
+    message: string,
+}

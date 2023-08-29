@@ -1,21 +1,19 @@
-import { useState, useEffect } from 'react'
-import { IUser } from '../../Types'
-
+import {  useEffect } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import UserProfileCard from './UserProfileCard'
-import { usersList } from '../../utils/helpers'
+import { useAppDispatch, useAppSelector } from '../../redux-hooks'
+import { getUsers } from '../../redux/actions/users'
+import loadingIcon from '../../assets/loading-icon.svg'
 const UsersList = () => {
-    const [users, setUsers] = useState<null | IUser[]>(null)
-    const [isLoading, setIsLoading] = useState(false)
-    const getUsers = () => {
-        setIsLoading(true)
-        setTimeout(() => {
-            setUsers(usersList)
-            setIsLoading(false);
-        }, 1000);
+    
+    const {users,loading} =useAppSelector(state=>state.users)
+    const dispatch=useAppDispatch()
+    const getUserList = () => {
+       dispatch(getUsers())
     }
     useEffect(() => {
-        getUsers()
+        getUserList()
+        // eslint-disable-next-line
     }, [])
     return (
         <section >
@@ -28,12 +26,14 @@ const UsersList = () => {
             </header>
             <div className='flex flex-col sm:flex-row sm:flex-wrap gap-4 '>
                 {
-                    (!isLoading && users) &&
-                    users.map(user => <UserProfileCard key={user.id} user={user} />)
+                    (!loading && users) &&
+                    users.map(user => <UserProfileCard key={user._id} user={user} />)
                 }
             </div>
             {
-                isLoading && <div>Loading...</div>
+                loading && <div className='w-full h-[80vh] flex justify-center items-center'>
+                    <img src={loadingIcon} alt="loading icon" />
+                </div>
             }
         </section>
     )

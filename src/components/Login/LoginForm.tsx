@@ -23,10 +23,10 @@ const LoginForm = () => {
             navigate('/')
             return
         }
-            const alertMessage = request.payload?.message
-            if (alertMessage) {
-                dispatch(showAlertWithTimeout({ alertMessage, alertType: 'error'}))
-            }
+        const alertMessage = request.payload?.message
+        if (alertMessage) {
+            dispatch(showAlertWithTimeout({ alertMessage, alertType: 'error' }))
+        }
     }
     const ValidationSchema = yup.object({
         email: yup.string().email('invalid email').required('email is required'),
