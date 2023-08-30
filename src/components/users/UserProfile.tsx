@@ -88,7 +88,7 @@ const UserProfile = () => {
                         </div>
                         <div className="space-y-2">
                             <h2 className="text-2xl ">Badges</h2>
-                            <div className="sm:flex gap-2 ">
+                            <div className="space-y-3 sm:space-y-0 sm:flex gap-2 ">
                                 {
                                     user.badges && user.badges.map(badge => <BadgeCard isAdmin={isAdmin} key={badge.name} badge={badge} />)
                                 }
