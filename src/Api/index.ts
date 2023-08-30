@@ -8,3 +8,4 @@ export const signUpUser=(data:ISignupForm)=>api.post('/auth/signup', data)
 export const logInUser=(data:ILoginForm)=>api.post('/auth/login', data)
 
 export const getAllUsers=()=>api.get('/users/all')
+export const getUserById=(userId:string)=>api.get(`/users/${userId}`)

@@ -31,6 +31,11 @@ const UsersList = () => {
                 }
             </div>
             {
+                (!loading && users?.length===0) && <div className='text-xl px-3'>
+                    No Users Account
+                </div>
+            }
+            {
                 loading && <div className='w-full h-[80vh] flex justify-center items-center'>
                     <img src={loadingIcon} alt="loading icon" />
                 </div>

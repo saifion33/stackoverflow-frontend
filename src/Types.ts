@@ -20,7 +20,7 @@ export interface IBasicUserDetails {
 
 // user interface
 export interface IUser extends IBasicUserDetails {
-    joinedOn: string,
+    joinedOn: Date,
     questionCount: number,
     answerCount: number,
     badges: IBadge[]
