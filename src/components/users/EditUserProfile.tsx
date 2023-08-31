@@ -1,8 +1,9 @@
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { object, string } from 'yup'
 import UpdateProfileImage from "./UpdateProfileImage"
-import { useAppSelector } from "../../redux-hooks"
+import { useAppDispatch, useAppSelector } from "../../redux-hooks"
 import { useParams } from "react-router-dom"
+import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 
 interface IUserForm {
     displayName: string,
@@ -13,12 +14,14 @@ interface IUserForm {
 
 const EditUserProfile = () => {
     const user = useAppSelector(state => state.auth.user?.profile)
+    const dispatch=useAppDispatch()
     const {id} =useParams()
     const validationSchema = object({
         displayName: string().min(3, 'Minimum 3 character is required').required('Display name is required.')
     })
     const handleSubmit = (values: IUserForm) => {
         console.log(values)
+        dispatch(showAlertWithTimeout({message:'We are working on this feature.',type:'info'}))
     }
     return (
         <div>
