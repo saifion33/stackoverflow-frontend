@@ -1,11 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { ISignupForm } from '../../Types'
+import { IJwtPayload, ISignupForm } from '../../Types'
 import * as yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { signup } from '../../redux/actions/auth'
 import loadingIcon from '../../assets/loading-icon.svg'
 import { useNavigate } from 'react-router-dom'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
+import jwtDecode from 'jwt-decode'
+import { logOutAuto, logout } from '../../redux/slice/authSlice'
+import { checkNetworkAndSession } from '../../utils/helpers'
 
 const SignupForm = () => {
     const dispatch = useAppDispatch()
@@ -16,16 +19,35 @@ const SignupForm = () => {
         email: '',
         password: ''
     }
+    const handleAutoLogout = (token: string) => {
+        const tokenTime = jwtDecode<IJwtPayload>(token).exp * 1000
+        const currentTime = Date.now()
+        const timeToexpire = tokenTime - currentTime
+        if (timeToexpire > 0) {
+            dispatch(logOutAuto(timeToexpire))
+        }
+        else {
+            dispatch(logout())
+        }
+    }
+    const signUpFunction =(values:ISignupForm)=>{
+        dispatch(signup(values))
+        .then(res=>{
+            if (signup.fulfilled.match(res)) {
+                const token = res.payload.data.token
+                token && handleAutoLogout(token)
+                navigate('/')
+            }else if (signup.rejected.match(res)) {
+                const alertMessage = res.payload?.message
+                if (alertMessage) {
+                    dispatch(showAlertWithTimeout({message:alertMessage,type:'error'}))
+                }
+            }
+        })
+
+    }
     const handleSubmit = async(values: ISignupForm) => {
-        const response=await dispatch(signup(values))
-        if (response.meta.requestStatus==='fulfilled') {
-            navigate('/')
-            return
-        }
-        const alertMessage=response.payload?.message
-        if (alertMessage) {
-            dispatch(showAlertWithTimeout({alertMessage,alertType:'error'}))
-        }
+        checkNetworkAndSession('network',()=>signUpFunction(values))
     }
     const passRegexp = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/
     const ValidationSchema = yup.object({

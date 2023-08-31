@@ -1,27 +1,51 @@
 import Navbar from "./components/Navbar/Navbar"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from "./pages/Home"
-import Signup from "./pages/Signup"
-import Login from "./pages/Login"
-import Users from "./pages/Users"
-import Tags from "./pages/Tags"
-import PageContainer from "./components/PageContainer"
-import AskQuestion from "./components/Questions/AskQuestion"
-import Questions from "./pages/Questions"
+import EditUserProfile from "./components/users/EditUserProfile"
 import AllQuestions from "./components/Questions/AllQuestions"
+import { useAppDispatch, useAppSelector } from "./redux-hooks"
+import AskQuestion from "./components/Questions/AskQuestion"
+import UserProfile from "./components/users/UserProfile"
+import PageContainer from "./components/PageContainer"
 import Question from "./components/Questions/Question"
 import UsersList from "./components/users/UsersList"
-import UserProfile from "./components/users/UserProfile"
-import EditUserProfile from "./components/users/EditUserProfile"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from "./pages/ResetPassword"
+import { logout } from "./redux/slice/authSlice"
+import Questions from "./pages/Questions"
+import { IJwtPayload } from "./Types"
+import Signup from "./pages/Signup"
+import jwtDecode from "jwt-decode"
+import Login from "./pages/Login"
+import Users from "./pages/Users"
+import { useEffect } from "react"
+import Home from "./pages/Home"
+import Tags from "./pages/Tags"
+
 
 const App = () => {
+  
+  const dispatch = useAppDispatch()
+  const token = useAppSelector(state => state.auth.user?.token)
+
+  const logOutAfterSessionExipred = () => {
+    if (token) {
+      const tokenTime = jwtDecode<IJwtPayload>(token).exp
+      const currentTime = Date.now()
+      const timeToexpire = tokenTime * 1000 - currentTime
+      if (timeToexpire <= 0) {
+        dispatch(logout())
+      }
+    }
+  }
+  useEffect(() => {
+    logOutAfterSessionExipred()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <main >
       <Router>
         <Navbar />
-       
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<PageContainer><Users /></PageContainer>} >

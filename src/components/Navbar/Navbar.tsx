@@ -17,7 +17,7 @@ const Navbar = () => {
     const dispatch=useAppDispatch()
     const handleSearchBoxOpen = () => setIsSearchBoxHidden(p => !p)
 
-
+    
     return (
         <nav className='flex sticky top-0 left-0 z-50  justify-center bg-white shadow w-full '>
             <div className='flex relative items-center   gap-1 py-1 px-2 w-full max-w-7xl'>

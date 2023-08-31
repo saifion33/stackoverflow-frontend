@@ -1,11 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { ILoginForm } from '../../Types'
+import { IJwtPayload, ILoginForm } from '../../Types'
 import * as yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import loadingIcon from '../../assets/loading-icon.svg'
 import { login } from '../../redux/actions/auth'
 import { useNavigate } from 'react-router-dom'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
+import { logOutAuto, logout } from '../../redux/slice/authSlice'
+import jwtDecode from 'jwt-decode'
+import { checkNetworkAndSession } from '../../utils/helpers'
+
 
 const LoginForm = () => {
 
@@ -17,17 +21,41 @@ const LoginForm = () => {
         email: '',
         password: ''
     }
-    const handleSubmit = async (values: ILoginForm) => {
-        const request = await dispatch(login(values))
-        if (request.meta.requestStatus === 'fulfilled') {
-            navigate('/')
-            return
+    const logInFunction=(values:ILoginForm)=>{
+        dispatch(login(values))
+        .then(res => {
+            if (login.fulfilled.match(res)) {
+                const token = res.payload.data.token
+                token && handleAutoLogout(token)
+                navigate('/')
+            }
+            else if (login.rejected.match(res)) {
+                const alertMessage = res.payload?.message
+                if (alertMessage) {
+                    dispatch(showAlertWithTimeout({message:alertMessage,type:'error'}))
+                }
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+    const handleAutoLogout = (token: string) => {
+        const tokenTime = jwtDecode<IJwtPayload>(token).exp * 1000
+        const currentTime = Date.now()
+        const timeToexpire = tokenTime - currentTime
+        if (timeToexpire > 0) {
+            dispatch(logOutAuto(timeToexpire))
         }
-        const alertMessage = request.payload?.message
-        if (alertMessage) {
-            dispatch(showAlertWithTimeout({ alertMessage, alertType: 'error' }))
+        else {
+            dispatch(logout())
         }
     }
+    
+    const handleSubmit = async (values: ILoginForm) => {
+        checkNetworkAndSession('network',()=>logInFunction(values))
+    }
+
     const ValidationSchema = yup.object({
         email: yup.string().email('invalid email').required('email is required'),
         password: yup.string().required('password is required')

@@ -54,7 +54,7 @@ const UpdateProfileImage = ({ imageUrl }: Iprops) => {
                 (imageUrl && !selectedProfileImage) && <img className="w-32 h-32" src={imageUrl} alt="user profile" onError={handleImageLoadingFailed} />
             }
             {
-                isImageLoadingFailed && <p className="text-center text-sm ">Failed to Load Image</p>
+                (isImageLoadingFailed && imageUrl) && <p className="text-center text-sm ">Failed to Load Image</p>
             }
             <label htmlFor="profile-image"><AiFillCamera className="absolute cursor-pointer z-30 text-3xl  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-green-400 rounded-full p-1" /></label>
             <input onChange={handleSelectProfileImage} className="hidden" type="file" name="profile-image" id="profile-image" />

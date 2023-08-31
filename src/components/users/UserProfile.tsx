@@ -2,13 +2,14 @@ import { LiaBirthdayCakeSolid } from 'react-icons/lia'
 import { FaLocationDot, FaPen } from 'react-icons/fa6'
 import BadgeCard from "./BadgeCard"
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { getUserById } from '../../Api'
 import { IUser } from '../../Types'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import loadingIcon from '../../assets/loading-icon.svg'
 import userIcon from '../../assets/user-icon.svg'
+import noInternetIcon from '../../assets/no-internet.svg'
 
 const UserProfile = () => {
     const [user, setUser] = useState<IUser | null>(null)
@@ -16,6 +17,7 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(false)
     const isAdmin = user?._id===loggedInUserId;
     const { id } = useParams()
+    const navigate=useNavigate()
     const dispatch = useAppDispatch()
     const getUser = async (userId: string) => {
         setLoading(true)
@@ -26,12 +28,12 @@ const UserProfile = () => {
         } catch (error) {
             console.log(error)
             const reqError = error as { response: { data: { status: number, message: string } } }
-            dispatch(showAlertWithTimeout({ alertMessage: reqError.response.data.message, alertType: 'error' }))
+            dispatch(showAlertWithTimeout({ message: reqError.response.data.message, type: 'error' }))
         }
         setLoading(false)
     }
     useEffect(() => {
-        if (id) {
+        if (id && navigator.onLine) {
             getUser(id)
         }
         // eslint-disable-next-line 
@@ -56,7 +58,7 @@ const UserProfile = () => {
                         </div>
                         {
                             isAdmin && <div>
-                                <button className="flex items-center gap-1 rounded border-[1px] px-2 py-1" > <FaPen /> Edit Profile</button>
+                                <button onClick={()=>navigate(`/users/edit/${user._id}`)} className="flex items-center gap-1 rounded border-[1px] px-2 py-1" > <FaPen /> Edit Profile</button>
                             </div>
                         }
                     </header>
@@ -115,6 +117,12 @@ const UserProfile = () => {
             {
                 loading && <div className='w-full h-[80vh] flex justify-center items-center'>
                     <img src={loadingIcon} alt="loading icon" />
+                </div>
+            }
+            {
+                (!loading && !user && !navigator.onLine) && <div className='flex flex-col justify-center items-center h-[88vh] '>
+                    <img className='w-44' src={noInternetIcon} alt="NO Internet Icon" />
+                    <p className='text-xl text-gray-500'>No Internet Connection</p>
                 </div>
             }
 

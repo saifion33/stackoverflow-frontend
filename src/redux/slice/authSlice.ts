@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IUser } from '../../Types';
 import { login, signup } from '../actions/auth';
+import { AppDispatch } from '../../store';
 
 
 interface Istate {
@@ -28,7 +29,7 @@ const authSlice = createSlice({
         logout: (state) => {
             state.user = null;
             localStorage.removeItem('user');
-        }
+        },
     },
     extraReducers: (builder) => {
         // ************************* Signup ************************
@@ -63,5 +64,10 @@ const authSlice = createSlice({
 })
 
 export const { logout } = authSlice.actions
+
+export const logOutAuto=(delay:number)=>async(dispatch:AppDispatch)=>{
+    await new Promise(resolve=>setTimeout(resolve, delay))
+    dispatch(logout())
+}
 
 export default authSlice.reducer

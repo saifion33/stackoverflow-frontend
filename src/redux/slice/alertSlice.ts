@@ -1,55 +1,47 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../store";
+import { nanoid } from 'nanoid/non-secure'
 
 
-
-interface Ivalues {
-    isAlertVisible: boolean;
-    alertType: 'info' | 'success' | 'warning' | 'error',
-    alertMessage: string,
-
+interface IAlert {
+    id: string;
+    message: string,
+    type: 'info' | 'success' | 'warning' | 'error',
+    timeout?: number
 }
 
-interface Iaction {
-    payload: {
-        alertType: 'info' | 'success' | 'warning' | 'error',
-        alertMessage: string,
-        time?:number
-    },
-    type: string
+interface Ivalues {
+    Alerts: IAlert[],
 }
 
 const initialState: Ivalues = {
-    isAlertVisible: false,
-    alertMessage: 'This is alert message',
-    alertType: 'info'
+    Alerts: []
 }
 
 const alertSlice = createSlice({
     name: 'alert',
     initialState,
     reducers: {
-        showAlert: (state, action: Iaction) => {
-            state.alertType = action.payload.alertType
-            state.alertMessage = action.payload.alertMessage
-            state.isAlertVisible = true
+        showAlert: (state, action: PayloadAction<IAlert>) => {
+            state.Alerts.push(action.payload)
         },
-        hideAlert: (state) => {
-            state.isAlertVisible = false;
+        hideAlert: (state, action: PayloadAction<string>) => {
+            state.Alerts = state.Alerts.filter(alert => alert.id !== action.payload)
         },
     }
 })
 
 
 
-export const { showAlert,hideAlert } = alertSlice.actions
+export const { showAlert, hideAlert } = alertSlice.actions
 
-export const showAlertWithTimeout = (payload:Iaction['payload']) => (dispatch:AppDispatch) => {
-    const { time } = payload;
-    dispatch(showAlert(payload));
+export const showAlertWithTimeout = (payload: { message: string,type: 'info' | 'success' | 'warning' | 'error',timeout?: number}) => (dispatch: AppDispatch) => {
+    const id = nanoid(10)
+    const alert={...payload,id}
+    dispatch(showAlert(alert))
     setTimeout(() => {
-      dispatch(hideAlert());
-    }, time || 3500);
-  };
+        dispatch(hideAlert(alert.id))
+    }, payload.timeout || 3500)
+};
 
 export default alertSlice.reducer

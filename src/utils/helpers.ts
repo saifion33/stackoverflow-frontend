@@ -1,10 +1,12 @@
 import { IAnswer, IQuestion, ITags, IUser } from "../Types";
 import AvatarEditor from 'react-avatar-editor'
+import { showAlertWithTimeout } from "../redux/slice/alertSlice";
+import store from "../store";
 export const usersList: IUser[] = [
     { _id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://randomuser.me/api/portraits/med/men/73.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'full stack develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
     { _id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://randomuser.me/api/portraits/med/men/6.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'MERN develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
     { _id: '3', displayName: 'iron man', location: 'usa', reputation: 596, tags: 'iron,al,go', imageUrl: 'https://randomuser.me/api/portraits/med/men/5.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'python develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
-    { _id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://randomuser.me/api/portraits/med/men/15.jpg', joinedOn:new Date(), answerCount: 0, questionCount: 0, about: 'exploring new planets and stars', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] }]
+    { _id: '4', displayName: 'alien', location: 'mars', reputation: 596, tags: 'alien++,dhoop,moonlight', imageUrl: 'https://randomuser.me/api/portraits/med/men/15.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'exploring new planets and stars', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] }]
 
 export const tags: ITags[] = [
     { id: '1', name: 'javascript', description: 'For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant to your question: e.g., [node.js], [jQuery], [JSON], [ReactJS], [angular], [ember.js], [vue.js], [typescript], [svelte], etc. ', questionAsked: 0 },
@@ -123,3 +125,38 @@ export const getImageBlob = async (editorRef: React.RefObject<AvatarEditor>) => 
         }
     })
 }
+type CheckType = 'network' | 'session' | 'both';
+
+export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
+
+    const isNetworkConnected = navigator.onLine
+    const isUserLoggedIn = store.getState().auth.user?.token
+
+    if (check === 'network') {
+        if (isNetworkConnected) {
+            next();
+            return
+        }
+        store.dispatch(showAlertWithTimeout({ message: 'Check Your Internet Connection', type: 'warning' }))
+    }
+    else if (check === 'session') {
+        if (isUserLoggedIn) {
+            next()
+            return
+        }
+        store.dispatch(showAlertWithTimeout({ message: "Session Expired or You're not logged in.", type: 'warning' }))
+    }
+    else if (check === 'both') {
+        if (!isUserLoggedIn) { 
+            store.dispatch(showAlertWithTimeout({ message: "Session Expired", type: 'warning' }))
+        }
+        if (!isNetworkConnected) {
+            store.dispatch(showAlertWithTimeout({ message: "Check your network", type: 'warning' }))
+        }
+        if (isNetworkConnected && isUserLoggedIn) {
+            next()
+        }
+    }
+
+}
+
