@@ -4,6 +4,7 @@ import UpdateProfileImage from "./UpdateProfileImage"
 import { useAppDispatch, useAppSelector } from "../../redux-hooks"
 import { useParams } from "react-router-dom"
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+import { FaUserSlash } from "react-icons/fa6"
 
 interface IUserForm {
     displayName: string,
@@ -14,26 +15,26 @@ interface IUserForm {
 
 const EditUserProfile = () => {
     const user = useAppSelector(state => state.auth.user?.profile)
-    const dispatch=useAppDispatch()
-    const {id} =useParams()
+    const dispatch = useAppDispatch()
+    const { id } = useParams()
     const validationSchema = object({
         displayName: string().min(3, 'Minimum 3 character is required').required('Display name is required.')
     })
     const handleSubmit = (values: IUserForm) => {
         console.log(values)
-        dispatch(showAlertWithTimeout({message:'We are working on this feature.',type:'info'}))
+        dispatch(showAlertWithTimeout({ message: 'We are working on this feature.', type: 'info' }))
     }
     return (
         <div>
             <h1 className="text-3xl my-4">Edit Your Profile</h1>
             {
-                (user && user._id===id) && <div className="border-[1px] rounded p-4">
+                (user && user._id === id) && <div className="border-[1px] rounded p-4">
                     <UpdateProfileImage imageUrl={user.imageUrl} />
                     <Formik initialValues={{
-                        displayName: user?.displayName ||'',
-                        about: user?.about ||'',
-                        location: user?.location ||'',
-                        tags: user?.tags ||'',
+                        displayName: user?.displayName || '',
+                        about: user?.about || '',
+                        location: user?.location || '',
+                        tags: user?.tags || '',
                     }}
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit} >
@@ -68,14 +69,19 @@ const EditUserProfile = () => {
                 </div>
             }
             {
-                !user && <div className="py-5 text-center text-lg">
-                    User Profile Not found
+                !user && <div className="py-5 text-center h-96 flex flex-col justify-center items-center gap-3">
+                    <FaUserSlash className="text-7xl text-gray-700 " />
+                    <div>
+                        <p className="text-xl text-gray-800">User Profile not found.</p>
+                        <p className=" text-gray-500">Make Sure You are Logged In</p>
+                    </div>
                 </div>
             }
             {
-                id!==user?._id && <div className="py-5 text-center text-lg">
-                   <p>You don't have permission to Edit this user profile</p>
-                   <p className="text-gray-500">Please Login with this user to edit profile</p>
+                (user && id !== user?._id) && <div className="py-5 text-center text-lg">
+
+                    <p>You don't have permission to Edit this user profile</p>
+                    <p className="text-gray-500">Please Login with this user to edit profile</p>
                 </div>
             }
         </div>
