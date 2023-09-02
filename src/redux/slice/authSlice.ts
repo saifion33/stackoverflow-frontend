@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IUser } from '../../Types';
-import { login, signup } from '../actions/auth';
+import { login, signup, updateUserProfile } from '../actions/auth';
 import { AppDispatch } from '../../store';
 
 
@@ -18,9 +18,10 @@ const storedUser = localStorage.getItem('user');
 
 const initialState: Istate = {
     loading: false,
-    user: storedUser ? JSON.parse(storedUser) : null,
+    user: (storedUser!==undefined && storedUser )? JSON.parse(storedUser) : null,
     error: null
 }
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -44,7 +45,7 @@ const authSlice = createSlice({
         })
         builder.addCase(signup.rejected, (state, action) => {
             state.loading = false,
-            state.error = action.payload?.message || action.error.message || 'unknown error'
+                state.error = action.payload?.message || action.error.message || 'unknown error'
         })
         // **************** Login **************************************
         builder.addCase(login.pending, (state) => {
@@ -60,13 +61,30 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = action.payload?.message || action.error.message || 'unknown error'
         })
+        // ***************** Update Profile ****************
+        builder.addCase(updateUserProfile.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        builder.addCase(updateUserProfile.fulfilled, (state, action) => {
+            state.loading = false;
+           if (state.user) {
+            const updatedUser={profile:{...state.user?.profile,...action.payload.data},token:state.user?.token}
+            state.user=updatedUser
+            localStorage.setItem('user', JSON.stringify(updatedUser))
+           }
+        })
+        builder.addCase(updateUserProfile.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload?.message || action.error.message || 'unknown error'
+        })
     }
 })
 
 export const { logout } = authSlice.actions
 
-export const logOutAuto=(delay:number)=>async(dispatch:AppDispatch)=>{
-    await new Promise(resolve=>setTimeout(resolve, delay))
+export const logOutAuto = (delay: number) => async (dispatch: AppDispatch) => {
+    await new Promise(resolve => setTimeout(resolve, delay))
     dispatch(logout())
 }
 

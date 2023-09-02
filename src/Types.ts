@@ -26,6 +26,14 @@ export interface IUser extends IBasicUserDetails {
     badges: IBadge[]
 }
 
+export interface IUserUpdates {
+    displayName?: string,
+    about?: string,
+    location?: string,
+    tags?: string,
+    image?: Blob
+}
+
 
 export interface IBadge {
     name: string
@@ -73,8 +81,8 @@ export interface IServerResponse {
 }
 
 export interface IJwtPayload {
-  email: string,
-  id: string,
-  iat: number,
-  exp: number,
+    email: string,
+    id: string,
+    iat: number,
+    exp: number,
 }

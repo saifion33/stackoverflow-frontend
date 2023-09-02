@@ -52,7 +52,7 @@ const Navbar = () => {
                 {
                     user && user.profile && <div className='flex gap-2 items-center'>
                         <Avatar user={user.profile} />
-                        <button onClick={()=>dispatch(logout())} className='px-3 py-[2px] border-2 border-blue-600 bg-blue-50 rounded '>Logout</button>
+                        <button onClick={()=>{dispatch(logout());navigate('/')}} className='px-3 py-[2px] border-2 border-blue-600 bg-blue-50 rounded '>Logout</button>
                     </div>
                 }
                 {

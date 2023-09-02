@@ -13,12 +13,17 @@ import noInternetIcon from '../../assets/no-internet.svg'
 
 const UserProfile = () => {
     const [user, setUser] = useState<IUser | null>(null)
-    const loggedInUserId =useAppSelector(state=>state.auth.user?.profile?._id)
+    const loggedInUserId = useAppSelector(state => state.auth.user?.profile?._id)
+    const [isImageError, setImageError] = useState(true);
     const [loading, setLoading] = useState(false)
-    const isAdmin = user?._id===loggedInUserId;
+    const isAdmin = user?._id === loggedInUserId;
     const { id } = useParams()
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
+
+    const handleImageLoadingFailed = () => {
+        setImageError(false)
+    }
     const getUser = async (userId: string) => {
         setLoading(true)
         try {
@@ -44,8 +49,10 @@ const UserProfile = () => {
                 (!loading && user) && <div>
                     <header className="flex justify-between py-4">
                         <div className=" space-y-3 ">
-                            {user.imageUrl && <img className='w-32' src={user.imageUrl} alt={user.displayName} />}
-                            {!user.imageUrl && <img className='w-32' src={userIcon} alt={user.displayName} />}
+                            <div className='bg-gray-200 rounded w-32 h-32'>
+                                {(user.imageUrl && isImageError) && <img className='w-32 rounded' onError={handleImageLoadingFailed} src={user.imageUrl} alt={user.displayName} />}
+                                {(!user.imageUrl || !isImageError) && <img className='w-32 rounded' src={userIcon} alt={user.displayName} />}
+                            </div>
                             <div>
                                 <h1 className="text-3xl">{user.displayName}</h1>
                                 <div className="flex items-center gap-2 text-gray-600 py-1 ">
@@ -58,7 +65,7 @@ const UserProfile = () => {
                         </div>
                         {
                             isAdmin && <div>
-                                <button onClick={()=>navigate(`/users/edit/${user._id}`)} className="flex items-center gap-1 rounded border-[1px] px-2 py-1" > <FaPen /> Edit Profile</button>
+                                <button onClick={() => navigate(`/users/edit/${user._id}`)} className="flex items-center gap-1 rounded border-[1px] px-2 py-1" > <FaPen /> Edit Profile</button>
                             </div>
                         }
                     </header>
@@ -83,7 +90,7 @@ const UserProfile = () => {
                             </div>
                             <div>
                                 <h2 className="text-2xl py-2">About</h2>
-                                <p>
+                                <p className='whitespace-pre-line'>
                                     {user.about}
                                 </p>
                             </div>
@@ -100,11 +107,11 @@ const UserProfile = () => {
                     <div className="space-y-2">
                         <h2 className="text-2xl pt-2">Tages</h2>
                         {
-                           user.tags && <div className="border-[1px] rounded divide-y sm:max-w-[244px] ">
+                            user.tags && <div className="border-[1px] rounded divide-y sm:max-w-[244px] ">
                                 {user.tags.split(',').map(tag => {
                                     return <div className="p-2" key={tag}>
-                                    <h2 className="text-[rgb(42,59,79)] bg-blue-100 w-fit py-[1px] px-2 rounded-md ">{tag}</h2>
-                                </div>
+                                        <h2 className="text-[rgb(42,59,79)] bg-blue-100 w-fit py-[1px] px-2 rounded-md ">{tag}</h2>
+                                    </div>
                                 })}
                             </div>
                         }

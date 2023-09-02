@@ -1,10 +1,15 @@
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { object, string } from 'yup'
-import UpdateProfileImage from "./UpdateProfileImage"
+import UpdateProfileImage, { RefType } from "./UpdateProfileImage"
 import { useAppDispatch, useAppSelector } from "../../redux-hooks"
 import { useParams } from "react-router-dom"
-import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+// import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 import { FaUserSlash } from "react-icons/fa6"
+import { useRef } from 'react'
+import { IUserUpdates } from "../../Types"
+import { updateUserProfile } from "../../redux/actions/auth"
+import loadingIcon from '../../assets/loading-icon.svg'
+import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 
 interface IUserForm {
     displayName: string,
@@ -13,23 +18,44 @@ interface IUserForm {
     tags: string,
 }
 
+
+
+
+
+const validationSchema = object({
+    displayName: string().min(3, 'Minimum 3 character is required').required('Display name is required.')
+})
+
+
 const EditUserProfile = () => {
-    const user = useAppSelector(state => state.auth.user?.profile)
-    const dispatch = useAppDispatch()
     const { id } = useParams()
-    const validationSchema = object({
-        displayName: string().min(3, 'Minimum 3 character is required').required('Display name is required.')
-    })
-    const handleSubmit = (values: IUserForm) => {
-        console.log(values)
-        dispatch(showAlertWithTimeout({ message: 'We are working on this feature.', type: 'info' }))
+    const dispatch = useAppDispatch()
+    const childComponentRef = useRef<RefType>()
+    const user = useAppSelector(state => state.auth.user?.profile)
+    const loading = useAppSelector(state => state.auth.loading)
+    const handleSubmit = async (values: IUserForm) => {
+        const image = await childComponentRef.current?.uploadImage()
+        const updates: IUserUpdates = {
+            displayName: (values.displayName.trim() !== user?.displayName)? values.displayName:undefined ,
+            about: (values.about.trim() !== user?.about) ? values.about :undefined,
+            location: (values.location.trim() !== user?.location) ? values.location : undefined,
+            tags: (values.tags.trim() !== user?.tags) ? values.tags : undefined,
+            image: image ? image : undefined
+        }
+        const res=await dispatch(updateUserProfile(updates))
+        if (updateUserProfile.fulfilled.match(res)) {
+            dispatch(showAlertWithTimeout({message:"User profile updated successfully",type:'success'}))
+        }
+        else if (updateUserProfile.rejected.match(res)) {
+            dispatch(showAlertWithTimeout({message:res.payload?.message||'Something went wrong',type:'error'}))
+        }
     }
     return (
         <div>
             <h1 className="text-3xl my-4">Edit Your Profile</h1>
             {
-                (user && user._id === id) && <div className="border-[1px] rounded p-4">
-                    <UpdateProfileImage imageUrl={user.imageUrl} />
+                (user && user._id === id && !loading) && <div className="border-[1px] rounded p-4">
+                    <UpdateProfileImage userId={user._id} imageUrl={user.imageUrl} ref={childComponentRef} />
                     <Formik initialValues={{
                         displayName: user?.displayName || '',
                         about: user?.about || '',
@@ -69,7 +95,7 @@ const EditUserProfile = () => {
                 </div>
             }
             {
-                !user && <div className="py-5 text-center h-96 flex flex-col justify-center items-center gap-3">
+                (!user && !loading) && <div className="py-5 text-center h-96 flex flex-col justify-center items-center gap-3">
                     <FaUserSlash className="text-7xl text-gray-700 " />
                     <div>
                         <p className="text-xl text-gray-800">User Profile not found.</p>
@@ -78,10 +104,15 @@ const EditUserProfile = () => {
                 </div>
             }
             {
-                (user && id !== user?._id) && <div className="py-5 text-center text-lg">
+                (user && id !== user?._id && !loading) && <div className="py-5 text-center text-lg">
 
                     <p>You don't have permission to Edit this user profile</p>
                     <p className="text-gray-500">Please Login with this user to edit profile</p>
+                </div>
+            }
+            {
+                loading && <div className='w-full h-[80vh] flex justify-center items-center'>
+                    <img src={loadingIcon} alt="loading icon" />
                 </div>
             }
         </div>
