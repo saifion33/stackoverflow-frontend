@@ -10,6 +10,7 @@ import { IUserUpdates } from "../../Types"
 import { updateUserProfile } from "../../redux/actions/auth"
 import loadingIcon from '../../assets/loading-icon.svg'
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+import { checkNetworkAndSession } from "../../utils/helpers"
 
 interface IUserForm {
     displayName: string,
@@ -33,22 +34,27 @@ const EditUserProfile = () => {
     const childComponentRef = useRef<RefType>()
     const user = useAppSelector(state => state.auth.user?.profile)
     const loading = useAppSelector(state => state.auth.loading)
+
+    const handleUpdate = async (updates: IUserUpdates) => {
+        const res = await dispatch(updateUserProfile(updates))
+        if (updateUserProfile.fulfilled.match(res)) {
+            dispatch(showAlertWithTimeout({ message: "User profile updated successfully", type: 'success' }))
+        }
+        else if (updateUserProfile.rejected.match(res)) {
+            dispatch(showAlertWithTimeout({ message: res.payload?.message || 'Something went wrong', type: 'error' }))
+        }
+    }
+
     const handleSubmit = async (values: IUserForm) => {
         const image = await childComponentRef.current?.uploadImage()
         const updates: IUserUpdates = {
-            displayName: (values.displayName.trim() !== user?.displayName)? values.displayName:undefined ,
-            about: (values.about.trim() !== user?.about) ? values.about :undefined,
+            displayName: (values.displayName.trim() !== user?.displayName) ? values.displayName : undefined,
+            about: (values.about.trim() !== user?.about) ? values.about : undefined,
             location: (values.location.trim() !== user?.location) ? values.location : undefined,
             tags: (values.tags.trim() !== user?.tags) ? values.tags : undefined,
             image: image ? image : undefined
         }
-        const res=await dispatch(updateUserProfile(updates))
-        if (updateUserProfile.fulfilled.match(res)) {
-            dispatch(showAlertWithTimeout({message:"User profile updated successfully",type:'success'}))
-        }
-        else if (updateUserProfile.rejected.match(res)) {
-            dispatch(showAlertWithTimeout({message:res.payload?.message||'Something went wrong',type:'error'}))
-        }
+        checkNetworkAndSession('both', () => handleUpdate(updates))
     }
     return (
         <div>
