@@ -1,6 +1,6 @@
-import { ReactNode } from "react"
 import NavContentBox from "./Navbar/NavContentBox"
 import { useLocation } from "react-router-dom"
+import { ReactNode } from "react"
 
 interface Iprops {
   children: ReactNode

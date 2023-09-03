@@ -1,9 +1,9 @@
 import { ChangeEvent, forwardRef, useImperativeHandle, useState,useRef } from "react"
+import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 import { AiFillCamera, AiFillCloseCircle } from "react-icons/ai"
 import { useAppDispatch } from "../../redux-hooks"
-import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
-import AvatarEditor from 'react-avatar-editor'
 import { getImageBlob } from "../../utils/helpers"
+import AvatarEditor from 'react-avatar-editor'
 
 
 

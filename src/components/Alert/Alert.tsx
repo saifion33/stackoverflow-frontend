@@ -1,7 +1,7 @@
 import { FaInfoCircle, FaCheckCircle } from 'react-icons/fa'
-import { MdDangerous } from 'react-icons/md'
-import { AiFillWarning } from 'react-icons/ai'
 import { useAppSelector } from '../../redux-hooks'
+import { AiFillWarning } from 'react-icons/ai'
+import { MdDangerous } from 'react-icons/md'
 
 const Alert = () => {
     const alerts = useAppSelector(state => state.alert.Alerts)

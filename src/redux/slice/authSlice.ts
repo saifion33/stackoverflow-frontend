@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { IUser } from '../../Types';
 import { login, signup, updateUserProfile } from '../actions/auth';
+import { createSlice } from '@reduxjs/toolkit'
 import { AppDispatch } from '../../store';
+import { IUser } from '../../Types';
 
 
 interface Istate {

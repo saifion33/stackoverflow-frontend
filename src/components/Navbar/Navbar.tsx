@@ -1,12 +1,13 @@
 import { AiOutlineMenu, AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
-import { useRef, useState } from 'react'
-import StackoverflowLogo from '../../assets/stackoverflow.svg'
 import StackoverflowIcon from '../../assets/stackoverflow-icon.svg'
-import NavContentBox from './NavContentBox'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
-import Avatar from '../users/Avatar'
+import StackoverflowLogo from '../../assets/stackoverflow.svg'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../../redux/slice/authSlice'
+import NavContentBox from './NavContentBox'
+import { useRef, useState } from 'react'
+import Avatar from '../users/Avatar'
+
 const Navbar = () => {
     const location = useLocation()
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)

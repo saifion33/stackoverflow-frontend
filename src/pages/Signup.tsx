@@ -1,12 +1,12 @@
-import { FcGoogle } from 'react-icons/fc'
 import { AiFillFacebook, AiFillGithub } from 'react-icons/ai'
-import SignupForm from '../components/Signup/SignupForm'
-
-import askQuestionIcon from '../assets/ask-Question.svg'
-import voteIcon from '../assets/voting.svg'
-import SaveIcon from '../assets/bookmark.svg'
 import reputationIcon from '../assets/reputation-badge.svg'
+import SignupForm from '../components/Signup/SignupForm'
+import askQuestionIcon from '../assets/ask-Question.svg'
+import SaveIcon from '../assets/bookmark.svg'
+import voteIcon from '../assets/voting.svg'
+import { FcGoogle } from 'react-icons/fc'
 import { Link } from 'react-router-dom'
+
 
 const Signup = () => {
   return (

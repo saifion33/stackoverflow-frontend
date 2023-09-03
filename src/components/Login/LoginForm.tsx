@@ -1,14 +1,14 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { IJwtPayload, ILoginForm } from '../../Types'
-import * as yup from 'yup'
+import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
+import { logOutAuto, logout } from '../../redux/slice/authSlice'
+import { checkNetworkAndSession } from '../../utils/helpers'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import loadingIcon from '../../assets/loading-icon.svg'
+import { IJwtPayload, ILoginForm } from '../../Types'
 import { login } from '../../redux/actions/auth'
 import { useNavigate } from 'react-router-dom'
-import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
-import { logOutAuto, logout } from '../../redux/slice/authSlice'
 import jwtDecode from 'jwt-decode'
-import { checkNetworkAndSession } from '../../utils/helpers'
+import * as yup from 'yup'
 
 
 const LoginForm = () => {

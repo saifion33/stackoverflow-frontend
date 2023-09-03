@@ -1,8 +1,9 @@
 import stackoverflowIcon from '../assets/stackoverflow-icon.svg'
-import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai'
 import LoginForm from '../components/Login/LoginForm'
+import { FcGoogle } from 'react-icons/fc'
 import { Link } from 'react-router-dom'
+
 const Login = () => {
     return (
         <div className='flex flex-col items-center '>

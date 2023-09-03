@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../redux-hooks'
+import noInternetIcon from '../../assets/no-internet.svg'
+import loadingIcon from '../../assets/loading-icon.svg'
+import { getUsers } from '../../redux/actions/users'
 import { AiOutlineSearch } from 'react-icons/ai'
 import UserProfileCard from './UserProfileCard'
-import { useAppDispatch, useAppSelector } from '../../redux-hooks'
-import { getUsers } from '../../redux/actions/users'
-import loadingIcon from '../../assets/loading-icon.svg'
-import noInternetIcon from '../../assets/no-internet.svg'
+import { useEffect } from 'react'
+
 const UsersList = () => {
 
     const { users, loading } = useAppSelector(state => state.users)

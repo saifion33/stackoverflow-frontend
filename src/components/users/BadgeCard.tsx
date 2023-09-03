@@ -1,8 +1,8 @@
+import { firstBadgeCriteria } from '../../utils/helpers'
 import bronzeBadge from '../../assets/bronze-badge.svg'
 import silverBadge from '../../assets/silver-badge.svg'
 import goldBadge from '../../assets/gold-badge.svg'
 import { IBadge } from '../../Types'
-import { firstBadgeCriteria } from '../../utils/helpers'
 
 interface IProps{
     badge: IBadge,

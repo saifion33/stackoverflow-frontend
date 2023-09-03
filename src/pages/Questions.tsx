@@ -1,6 +1,5 @@
-
-import { Outlet, useLocation } from "react-router-dom"
 import RightBar from "../components/Questions/RightBar"
+import { Outlet, useLocation } from "react-router-dom"
 
 const Questions = () => {
     const location=useLocation()

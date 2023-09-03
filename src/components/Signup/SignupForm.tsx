@@ -1,14 +1,14 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { IJwtPayload, ISignupForm } from '../../Types'
-import * as yup from 'yup'
-import { useAppDispatch, useAppSelector } from '../../redux-hooks'
-import { signup } from '../../redux/actions/auth'
-import loadingIcon from '../../assets/loading-icon.svg'
-import { useNavigate } from 'react-router-dom'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
-import jwtDecode from 'jwt-decode'
+import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { logOutAuto, logout } from '../../redux/slice/authSlice'
 import { checkNetworkAndSession } from '../../utils/helpers'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import loadingIcon from '../../assets/loading-icon.svg'
+import { IJwtPayload, ISignupForm } from '../../Types'
+import { signup } from '../../redux/actions/auth'
+import { useNavigate } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
+import * as yup from 'yup'
 
 const SignupForm = () => {
     const dispatch = useAppDispatch()

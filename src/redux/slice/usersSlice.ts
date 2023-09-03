@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IBasicUserDetails} from "../../Types";
 import {getUsers} from '../actions/users'
+
 interface IValues{
     loading: boolean;
     users:IBasicUserDetails[] | null;

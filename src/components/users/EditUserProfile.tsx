@@ -1,16 +1,15 @@
-import { ErrorMessage, Field, Form, Formik } from "formik"
-import { object, string } from 'yup'
-import UpdateProfileImage, { RefType } from "./UpdateProfileImage"
-import { useAppDispatch, useAppSelector } from "../../redux-hooks"
-import { useParams } from "react-router-dom"
-// import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
-import { FaUserSlash } from "react-icons/fa6"
-import { useRef } from 'react'
-import { IUserUpdates } from "../../Types"
-import { updateUserProfile } from "../../redux/actions/auth"
-import loadingIcon from '../../assets/loading-icon.svg'
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+import { useAppDispatch, useAppSelector } from "../../redux-hooks"
+import UpdateProfileImage, { RefType } from "./UpdateProfileImage"
 import { checkNetworkAndSession } from "../../utils/helpers"
+import { updateUserProfile } from "../../redux/actions/auth"
+import { ErrorMessage, Field, Form, Formik } from "formik"
+import loadingIcon from '../../assets/loading-icon.svg'
+import { FaUserSlash } from "react-icons/fa6"
+import { useParams } from "react-router-dom"
+import { IUserUpdates } from "../../Types"
+import { object, string } from 'yup'
+import { useRef } from 'react'
 
 interface IUserForm {
     displayName: string,

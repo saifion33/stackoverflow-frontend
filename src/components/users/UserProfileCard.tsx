@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom"
-import { IBasicUserDetails } from "../../Types"
 import userIcon from '../../assets/user-icon.svg'
+import { IBasicUserDetails } from "../../Types"
+import { useNavigate } from "react-router-dom"
 interface IProps {
     user: IBasicUserDetails
 }

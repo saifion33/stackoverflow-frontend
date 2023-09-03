@@ -1,15 +1,15 @@
+import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
+import { useAppDispatch, useAppSelector } from '../../redux-hooks'
+import { useNavigate, useParams } from "react-router-dom"
+import noInternetIcon from '../../assets/no-internet.svg'
+import loadingIcon from '../../assets/loading-icon.svg'
 import { LiaBirthdayCakeSolid } from 'react-icons/lia'
 import { FaLocationDot, FaPen } from 'react-icons/fa6'
-import BadgeCard from "./BadgeCard"
-import { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { getUserById } from '../../Api'
-import { IUser } from '../../Types'
-import { useAppDispatch, useAppSelector } from '../../redux-hooks'
-import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
-import loadingIcon from '../../assets/loading-icon.svg'
 import userIcon from '../../assets/user-icon.svg'
-import noInternetIcon from '../../assets/no-internet.svg'
+import { useState, useEffect } from "react"
+import { getUserById } from '../../Api'
+import BadgeCard from "./BadgeCard"
+import { IUser } from '../../Types'
 
 const UserProfile = () => {
     const [user, setUser] = useState<IUser | null>(null)

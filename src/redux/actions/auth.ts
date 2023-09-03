@@ -1,6 +1,6 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import { logInUser, signUpUser, updateUser } from '../../Api'
 import { ILoginForm, IServerResponse, ISignupForm, IUser, IUserUpdates } from '../../Types'
+import { logInUser, signUpUser, updateUser } from '../../Api'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
 interface IResponse extends IServerResponse {
     data: {

@@ -1,9 +1,9 @@
-
-import { GiEarthAmerica } from 'react-icons/gi'
-import { BiSolidInfoCircle } from 'react-icons/bi'
-import starIcon from '../../assets/star-collective.svg'
 import promoImage from '../../assets/stackoverflow-sidebar-promo.svg'
+import starIcon from '../../assets/star-collective.svg'
+import { BiSolidInfoCircle } from 'react-icons/bi'
+import { GiEarthAmerica } from 'react-icons/gi'
 import CustomNavLink from './CustomNavlink'
+
 interface IProps{
     isOpenFromPage: boolean
     onLinkClick?():void,
