@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IQuestion } from "../../Types";
-import { askQuestion } from "../actions/questions";
+import { askQuestion, getAllQuestions } from "../actions/questions";
 
 interface IState {
     loading: boolean
@@ -19,6 +19,7 @@ const questionsSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        // ****************** Ask Question ************************************
         builder.addCase(askQuestion.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -34,6 +35,20 @@ const questionsSlice = createSlice({
         builder.addCase(askQuestion.rejected, (state, action) => {
             state.loading = false;
             state.error=action.payload?.message || action.error.message || 'Unknown Error occurred.'
+        })
+
+        // ****************************** Get All Questions ****************************
+        builder.addCase(getAllQuestions.pending,(state)=>{
+            state.loading=true;
+            state.error=null;
+        })
+        builder.addCase(getAllQuestions.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.questions=action.payload.data
+        })
+        builder.addCase(getAllQuestions.rejected,(state,action)=>{
+            state.loading=false;
+            state.error=action.payload?.message || action.error.message || 'Unknown Error';
         })
     }
 })
