@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { IAskQuestion } from '../../Types'
 import * as yup from 'yup'
+import { askQuestionApi } from '../../Api'
 
 const AskQuestion = () => {
     const initialValues = {
@@ -16,7 +17,7 @@ const AskQuestion = () => {
     })
 
     const handleSubmit = (values: IAskQuestion) => {
-        console.log(values)
+       askQuestionApi(values).then(res=>console.log(res)).catch(err => console.log(err));
     }
 
     return (

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {ILoginForm, ISignupForm} from '../Types'
+import {IAskQuestion, ILoginForm, ISignupForm} from '../Types'
 
 
 const api=axios.create({
@@ -7,16 +7,14 @@ const api=axios.create({
 })
 
 api.interceptors.request.use((config)=>{
-    const methods=['patch','delete']
-    if (config.method && methods.includes(config.method)) {
+    const methods=['post','patch','delete']
+    if (config.method && methods.includes(config.method) && (!config.url?.includes('/auth') )) {
         const storedToken=localStorage.getItem('user')
         const token=storedToken?JSON.parse(storedToken).token:null
         if (token) {
             config.headers.Authorization=`Bearer ${token}`
         }
     }
- 
-
    return config
 })
 
@@ -26,3 +24,5 @@ export const logInUser=(data:ILoginForm)=>api.post('/auth/login', data)
 export const getAllUsers=()=>api.get('/users/all')
 export const getUserById=(userId:string)=>api.get(`/users/${userId}`)
 export const updateUser=(updates:FormData)=>api.patch('/users/update',updates)
+
+export const askQuestionApi=(questionData:IAskQuestion)=>api.post('/questions/ask',questionData)

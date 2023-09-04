@@ -5,7 +5,7 @@ interface Iprops{
 }
 
 const QuestionCard = ({question}:Iprops) => {
-    const {title,description,tags,votes,answers,askedAt,askedBy}=question;
+    const {title,description,tags,votes,answers,askedOn,askedBy}=question;
   return (
     <div className="border-b-[1px] p-3 md3:flex md3:gap-2 md3:flex-wrap">
         <div className="flex md3:flex-col gap-2 text-sm">
@@ -26,7 +26,7 @@ const QuestionCard = ({question}:Iprops) => {
                 <img className="w-5 h-5 rounded-sm" src={askedBy.imageUrl} alt="user profile" />
                 <p className="">{askedBy.displayName}</p>
             </div>
-            <p className="text-gray-500">asked {askedAt}</p>
+            <p className="text-gray-500">asked {askedOn}</p>
         </div>
     </div>
   )

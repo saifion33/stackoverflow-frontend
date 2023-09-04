@@ -57,22 +57,31 @@ export interface IAskQuestion {
     tags: string
 }
 
-// Question interface
+interface IAuthor {
+    _id: string,
+    displayName: string,
+    reputation: number,
+    imageUrl: string
+}
 
+// Question interface
 export interface IQuestion extends IAskQuestion {
-    id: string,
-    votes: number,
-    answers: number,
-    askedAt: string,
-    askedBy: IUser
+    _id: string
+    upVote: string[]
+    downVote: string[]
+    noOfAnswers: number
+    askedOn: string
+    author: IAuthor
 }
 
 export interface IAnswer {
+    _id: string
     answer: string
     answerOf: string
-    answerBy: IUser
-    answerAt: string
-    votes: number
+    author: IAuthor
+    answerOn: string
+    upVote: string[]
+    downVote: string[]
 }
 
 export interface IServerResponse {

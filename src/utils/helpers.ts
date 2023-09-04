@@ -17,92 +17,53 @@ export const tags: ITags[] = [
 
 export const questions: IQuestion[] = [
     {
-        id: '0',
+        _id: '0',
         title: 'How to create a function in javascript',
         description: "I'm trying to create a function in javascript please help me",
         tags: 'javascript,es2015',
         answers: 1,
-        askedAt: 'Aug 9 at 9:50',
+        askedOn: 'Aug 9 at 9:50',
         votes: 0,
         askedBy: {
-            ...usersList[0]
+           displayName:'viscarte',
+           _id:'sdfjioeuroi',
+           imageUrl:'https://example.com/',
+           reputation:0
         }
     },
     {
-        id: '1',
+        _id: '1',
         title: 'How to create a function in javascript',
         description: "I'm trying to create a function in javascript please help me",
         tags: 'javascript,es2015',
         answers: 0,
-        askedAt: 'Aug 9 at 9:50',
+        askedOn: 'Aug 9 at 9:50',
         votes: 0,
         askedBy: {
-            ...usersList[0]
+            displayName:'viscarte',
+           _id:'sdfjioeuroi',
+           imageUrl:'https://example.com/',
+           reputation:0
         }
     },
     {
-        id: '2',
+        _id: '2',
         title: 'How to create a function in javascript',
         description: "I'm trying to create a function in javascript please help me",
         tags: 'javascript,es2015',
         answers: 0,
-        askedAt: 'Aug 9 at 9:50',
+        askedOn: 'Aug 9 at 9:50',
         votes: 0,
         askedBy: {
-            ...usersList[0]
-        }
-    },
-    {
-        id: '3',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 0,
-        askedAt: 'Aug 9 at 9:50',
-        votes: 0,
-        askedBy: {
-            ...usersList[0]
-        }
-    },
-    {
-        id: '4',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 0,
-        askedAt: 'Aug 9 at 9:50',
-        votes: 0,
-        askedBy: {
-            ...usersList[0]
-        }
-    },
-    {
-        id: '5',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 0,
-        askedAt: 'Aug 9 at 9:50',
-        votes: 0,
-        askedBy: {
-            ...usersList[0]
-        }
-    },
-    {
-        id: '6',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 0,
-        askedAt: 'Aug 10 at 9:50',
-        votes: 0,
-        askedBy: {
-            ...usersList[1]
+            displayName:'viscarte',
+            _id:'sdfjioeuroi',
+            imageUrl:'https://example.com/',
+            reputation:0
         }
     }
 ]
 
-export const answer: IAnswer = { answer: 'HI, define function in javascript like this function functionName(){//some code here}', answerAt: 'Aug 10 at 9:50', answerBy: usersList[1], answerOf: '0', votes: 0 }
+export const answer: IAnswer = {_id:'dlsfslkd', answer: 'HI, define function in javascript like this function functionName(){//some code here}', answerOn: 'Aug 10 at 9:50', answerBy: {_id:'sdfuoef',displayName:'saifi',imageUrl:'https://example.com',reputation:0}, answerOf: '0', votes: 0 }
 
 export const firstBadgeCriteria: { [key: string]: string } = {
     bronze: 'Ask a question that scrore 2 or more to earn your first Bronze badge',
@@ -147,7 +108,7 @@ export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
         store.dispatch(showAlertWithTimeout({ message: "Session Expired or You're not logged in.", type: 'warning' }))
     }
     else if (check === 'both') {
-        if (!isUserLoggedIn) { 
+        if (!isUserLoggedIn) {
             store.dispatch(showAlertWithTimeout({ message: "Session Expired", type: 'warning' }))
         }
         if (!isNetworkConnected) {
