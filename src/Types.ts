@@ -61,7 +61,7 @@ interface IAuthor {
     _id: string,
     displayName: string,
     reputation: number,
-    imageUrl: string
+    imageUrl: string|null
 }
 
 // Question interface
@@ -76,7 +76,7 @@ export interface IQuestion extends IAskQuestion {
 
 export interface IAnswer {
     _id: string
-    answer: string
+    body: string
     answerOf: string
     author: IAuthor
     answerOn: string

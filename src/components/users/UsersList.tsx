@@ -34,14 +34,17 @@ const UsersList = () => {
                     users.map(user => <UserProfileCard key={user._id} user={user} />)
                 }
             </div>
+            
             {
                 (!loading && users?.length === 0) && <div className='text-xl px-3'>
                     No Users Account
                 </div>
             }
+
             {
                 loading && <Loading/>
             }
+
             {
                 (!loading && !users && !navigator.onLine) && <NoInternet/>
             }

@@ -1,4 +1,4 @@
-import { IAnswer, IQuestion, ITags, IUser } from "../Types";
+import { IAnswer, ITags, IUser } from "../Types";
 import AvatarEditor from 'react-avatar-editor'
 import { showAlertWithTimeout } from "../redux/slice/alertSlice";
 import store from "../store";
@@ -15,55 +15,7 @@ export const tags: ITags[] = [
     { id: '4', name: 'C#', description: `C# (pronounced "see sharp") is a high-level, statically typed, multi-paradigm programming language developed by Microsoft. C# code usually targets Microsoft's .NET family of tools and run-times, which include .NET, .NET Framework, .NET MAUI, and Xamarin among others. Use this tag for questions about code written in C# or about C#'s formal specification.`, questionAsked: 0 }
 ]
 
-export const questions: IQuestion[] = [
-    {
-        _id: '0',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 1,
-        askedOn: 'Aug 9 at 9:50',
-        votes: 0,
-        askedBy: {
-           displayName:'viscarte',
-           _id:'sdfjioeuroi',
-           imageUrl:'https://example.com/',
-           reputation:0
-        }
-    },
-    {
-        _id: '1',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 0,
-        askedOn: 'Aug 9 at 9:50',
-        votes: 0,
-        askedBy: {
-            displayName:'viscarte',
-           _id:'sdfjioeuroi',
-           imageUrl:'https://example.com/',
-           reputation:0
-        }
-    },
-    {
-        _id: '2',
-        title: 'How to create a function in javascript',
-        description: "I'm trying to create a function in javascript please help me",
-        tags: 'javascript,es2015',
-        answers: 0,
-        askedOn: 'Aug 9 at 9:50',
-        votes: 0,
-        askedBy: {
-            displayName:'viscarte',
-            _id:'sdfjioeuroi',
-            imageUrl:'https://example.com/',
-            reputation:0
-        }
-    }
-]
-
-export const answer: IAnswer = {_id:'dlsfslkd', answer: 'HI, define function in javascript like this function functionName(){//some code here}', answerOn: 'Aug 10 at 9:50', answerBy: {_id:'sdfuoef',displayName:'saifi',imageUrl:'https://example.com',reputation:0}, answerOf: '0', votes: 0 }
+export const answer: IAnswer = {_id:'dlsfslkd', body: 'HI, define function in javascript like this function functionName(){//some code here}', answerOn: 'Aug 10 at 9:50', author: {_id:'sdfuoef',displayName:'saifi',imageUrl:'https://example.com',reputation:0}, answerOf: '0', downVote:[],upVote:[] }
 
 export const firstBadgeCriteria: { [key: string]: string } = {
     bronze: 'Ask a question that scrore 2 or more to earn your first Bronze badge',

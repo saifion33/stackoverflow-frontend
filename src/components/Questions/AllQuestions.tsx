@@ -15,10 +15,10 @@ const AllQuestions = () => {
     const getAllQuestionsFunction = async () => {
         const response = await dispatch(getAllQuestions())
         if (getAllQuestions.rejected.match(response)) {
+            console.log(response.payload?.message)
             dispatch(showAlertWithTimeout({ message: response.payload?.message || 'Something went wrong', type: 'error' }))
         }
     }
-
     useEffect(() => {
         checkNetworkAndSession('network', () => getAllQuestionsFunction())
         // eslint-disable-next-line

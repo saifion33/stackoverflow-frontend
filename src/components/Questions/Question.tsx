@@ -1,16 +1,15 @@
-import { answer, checkNetworkAndSession } from "../../utils/helpers"
+import { checkNetworkAndSession } from "../../utils/helpers"
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 import QuestionDetailsCard from "./QuestionDetailsCard"
 import { useAppDispatch } from "../../redux-hooks"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { getQuestionApi } from "../../Api"
-import WriteAnswer from "./WriteAnswer"
 import { IQuestion } from "../../Types"
 import NoInternet from "../NoInternet"
-import AnswerCard from "./AnswerCard"
 import Timeago from 'react-timeago'
 import Loading from "../Loading"
+import AnswerContainer from "../Answer/AnswersContainer"
 
 
 const Question = () => {
@@ -55,15 +54,7 @@ const Question = () => {
             </div>
           </header>
           <QuestionDetailsCard question={question} />
-          <div className="mt-5">
-            <div className="py-3 border-t-[1px]">
-              <p className="text-xl ">{question.noOfAnswers} answer</p>
-            </div>
-            <AnswerCard Answer={answer} />
-          </div>
-          <footer>
-            <WriteAnswer />
-          </footer>
+          <AnswerContainer/>
         </div>
       }
 
