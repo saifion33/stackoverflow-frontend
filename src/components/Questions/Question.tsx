@@ -6,14 +6,14 @@ import WriteAnswer from "./WriteAnswer"
 
 const Question = () => {
   const question = questions[0]
-  const { title, askedAt,answers } = question
+  const { title, askedOn,noOfAnswers } = question
   return (
     <section className="">
       <header className="flex justify-between flex-wrap-reverse gap-2 py-3 border-b-2 mb-2">
         <div >
           <h1 className="text-3xl ">{title}</h1>
           <div className="text-xs">
-            <p className="text-gray-600 pt-3">Asked <span className="text-gray-900">{askedAt}</span></p>
+            <p className="text-gray-600 pt-3">Asked <span className="text-gray-900">{askedOn.toLocaleDateString('en-IN')}</span></p>
           </div>
         </div>
         <div>
@@ -23,7 +23,7 @@ const Question = () => {
       <QuestionDetailsCard question={question} />
       <div className="mt-5">
         <div className="py-3 border-t-[1px]">
-          <p className="text-xl ">{answers} answer</p>
+          <p className="text-xl ">{noOfAnswers} answer</p>
         </div>
         <AnswerCard Answer={answer} />
       </div>

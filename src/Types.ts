@@ -70,7 +70,7 @@ export interface IQuestion extends IAskQuestion {
     upVote: string[]
     downVote: string[]
     noOfAnswers: number
-    askedOn: string
+    askedOn: Date
     author: IAuthor
 }
 
