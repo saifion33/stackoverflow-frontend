@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
-import noInternetIcon from '../../assets/no-internet.svg'
-import loadingIcon from '../../assets/loading-icon.svg'
 import { getUsers } from '../../redux/actions/users'
 import { AiOutlineSearch } from 'react-icons/ai'
 import UserProfileCard from './UserProfileCard'
 import { useEffect } from 'react'
+import NoInternet from '../NoInternet'
+import Loading from '../Loading'
 
 const UsersList = () => {
 
@@ -40,15 +40,10 @@ const UsersList = () => {
                 </div>
             }
             {
-                loading && <div className='w-full h-[80vh] flex justify-center items-center'>
-                    <img src={loadingIcon} alt="loading icon" />
-                </div>
+                loading && <Loading/>
             }
             {
-                (!loading && !users && !navigator.onLine) && <div className='flex flex-col justify-center items-center h-[70vh] '>
-                    <img className='w-40' src={noInternetIcon} alt="NO Internet Icon" />
-                    <p className='text-xl text-gray-500'>No Internet Connection</p>
-                </div>
+                (!loading && !users && !navigator.onLine) && <NoInternet/>
             }
         </section>
     )

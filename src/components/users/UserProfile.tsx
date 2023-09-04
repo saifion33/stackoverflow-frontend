@@ -1,15 +1,15 @@
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { useNavigate, useParams } from "react-router-dom"
-import noInternetIcon from '../../assets/no-internet.svg'
-import loadingIcon from '../../assets/loading-icon.svg'
 import { LiaBirthdayCakeSolid } from 'react-icons/lia'
 import { FaLocationDot, FaPen } from 'react-icons/fa6'
 import userIcon from '../../assets/user-icon.svg'
 import { useState, useEffect } from "react"
 import { getUserById } from '../../Api'
+import NoInternet from '../NoInternet'
 import BadgeCard from "./BadgeCard"
 import { IUser } from '../../Types'
+import Loading from '../Loading'
 
 const UserProfile = () => {
     const [user, setUser] = useState<IUser | null>(null)
@@ -121,16 +121,12 @@ const UserProfile = () => {
                     </div>
                 </div>
             }
+            
             {
-                loading && <div className='w-full h-[80vh] flex justify-center items-center'>
-                    <img src={loadingIcon} alt="loading icon" />
-                </div>
+                loading && <Loading/>
             }
             {
-                (!loading && !user && !navigator.onLine) && <div className='flex flex-col justify-center items-center h-[88vh] '>
-                    <img className='w-44' src={noInternetIcon} alt="NO Internet Icon" />
-                    <p className='text-xl text-gray-500'>No Internet Connection</p>
-                </div>
+                (!loading && !user && !navigator.onLine) && <NoInternet/>
             }
 
 

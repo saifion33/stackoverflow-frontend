@@ -5,10 +5,10 @@ interface Iprops {
     question: IQuestion;
 }
 const QuestionDetailsCard = ({ question }: Iprops) => {
-    const { votes, description } = question
+    const { upVote,downVote, description } = question
     return (
         <div className="flex gap-3">
-           <Votes votes={votes} onUpvote={()=>alert('upvoted')} onDownvote={()=>alert('downvoted')} />
+           <Votes votes={upVote.length-downVote.length} onUpvote={()=>alert('upvoted')} onDownvote={()=>alert('downvoted')} />
             <div>{description}</div>
         </div>
     )

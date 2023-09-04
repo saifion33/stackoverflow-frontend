@@ -27,3 +27,4 @@ export const updateUser=(updates:FormData)=>api.patch('/users/update',updates)
 
 export const askQuestionApi=(questionData:IAskQuestion)=>api.post('/questions/ask',questionData)
 export const getAllQuestionsApi=()=>api.get('/questions/all')
+export const getQuestionApi=(questionId:string)=>api.get(`/questions/${questionId}`)
