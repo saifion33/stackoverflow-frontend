@@ -1,7 +1,18 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { IAskQuestion } from '../../Types'
 import * as yup from 'yup'
-import { askQuestionApi } from '../../Api'
+
+import { checkNetworkAndSession } from '../../utils/helpers'
+import { useAppDispatch } from '../../redux-hooks'
+import { askQuestion } from '../../redux/actions/questions'
+import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
+import { useNavigate } from 'react-router-dom'
+
+const validationSchema = yup.object({
+    title: yup.string().min(5, 'minimum 5 character is required').max(100, 'maximum 100 character is allowed').required('Title is required'),
+    description: yup.string().min(20, 'minimum 20 character is required').max(6000, 'maximum 6000 character is allowed').required('Description is required'),
+    tags: yup.string().required('Tags is required')
+})
 
 const AskQuestion = () => {
     const initialValues = {
@@ -10,15 +21,24 @@ const AskQuestion = () => {
         tags: ''
     }
 
-    const validationSchema = yup.object({
-        title: yup.string().min(5, 'minimum 5 character is required').max(100, 'maximum 100 character is allowed').required('Title is required'),
-        description: yup.string().min(20, 'minimum 20 character is required').max(6000, 'maximum 6000 character is allowed').required('Description is required'),
-        tags: yup.string().required('Tags is required')
-    })
+    const dispatch = useAppDispatch()
+    const navigate=useNavigate()
+
+    const postAnswer = async (values: IAskQuestion) => {
+        const response = await dispatch(askQuestion(values))
+        if (askQuestion.fulfilled.match(response)) {
+            dispatch(showAlertWithTimeout({ message: 'Question posted successfully.', type: 'success' }))
+            navigate('/questions')
+        } else if (askQuestion.rejected.match(response)) {
+            dispatch(showAlertWithTimeout({ message: response.payload?.message || 'Something Went Wrong.', type: 'error' }))
+        }
+    }
+
 
     const handleSubmit = (values: IAskQuestion) => {
-       askQuestionApi(values).then(res=>console.log(res)).catch(err => console.log(err));
+        checkNetworkAndSession('both', () => postAnswer(values))
     }
+
 
     return (
         <div className=' flex justify-center' >
