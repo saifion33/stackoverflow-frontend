@@ -11,7 +11,7 @@ import Timeago from 'react-timeago'
 import Loading from "../Loading"
 import AnswerContainer from "../Answer/AnswersContainer"
 import userIcon from '../../assets/user-icon.svg'
-
+import * as copy from 'copy-to-clipboard'
 
 const Question = () => {
   const [question, setQuestion] = useState<null | IQuestion>(null)
@@ -33,6 +33,13 @@ const Question = () => {
         })
         .finally(() => setLoading(false))
     }
+  }
+  const handleCopy=()=>{
+    const questionLink=window.location.href
+    const onCopySuccess=()=>{
+      dispatch(showAlertWithTimeout({message:'Question Link copied.',type:'info'}))
+    }
+    copy(questionLink,{onCopy:onCopySuccess})
   }
 
   useEffect(() => {
@@ -58,7 +65,7 @@ const Question = () => {
           <QuestionDetailsCard question={question} />
           <div className="flex justify-between items-end">
             <div>
-              <button className="text-sm text-gray-500">Share</button>
+              <button onClick={handleCopy} className="text-sm text-gray-500">Share</button>
             </div>
             <div>
               <div className="text-xs text-gray-500">Asked {new Date(question.askedOn).toLocaleString('en-IN', { month: 'short', day: '2-digit' })} at {new Date(question.askedOn).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
