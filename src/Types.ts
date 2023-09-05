@@ -74,6 +74,11 @@ export interface IQuestion extends IAskQuestion {
     author: IAuthor
 }
 
+export interface IpostAnswer{
+    questionId: string
+    answerBody: string
+}
+
 export interface IAnswer {
     _id: string
     body: string
@@ -95,3 +100,4 @@ export interface IJwtPayload {
     iat: number,
     exp: number,
 }
+

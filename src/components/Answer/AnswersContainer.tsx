@@ -1,9 +1,10 @@
 import AnswerCard from './AnswerCard'
 import { answer } from '../../utils/helpers'
 import WriteAnswer from './WriteAnswer'
+import { useParams } from 'react-router-dom'
 
 const AnswerContainer= () => {
-
+    const {id} =useParams()
     return (
         <div>
             <div className="mt-5">
@@ -13,7 +14,7 @@ const AnswerContainer= () => {
                 <AnswerCard Answer={answer} />
             </div>
             <footer>
-                <WriteAnswer/>
+               {id && <WriteAnswer questionId={id} />}
             </footer>
         </div>
     )

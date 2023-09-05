@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {IAskQuestion, ILoginForm, ISignupForm} from '../Types'
+import {IAskQuestion, ILoginForm, ISignupForm, IpostAnswer} from '../Types'
 
 
 const api=axios.create({
@@ -28,3 +28,5 @@ export const updateUser=(updates:FormData)=>api.patch('/users/update',updates)
 export const askQuestionApi=(questionData:IAskQuestion)=>api.post('/questions/ask',questionData)
 export const getAllQuestionsApi=()=>api.get('/questions/all')
 export const getQuestionApi=(questionId:string)=>api.get(`/questions/${questionId}`)
+
+export const postAnswerApi=(answerData:IpostAnswer)=>api.patch('/answers/post',answerData)
