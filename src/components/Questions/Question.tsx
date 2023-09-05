@@ -2,7 +2,7 @@ import { checkNetworkAndSession } from "../../utils/helpers"
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 import QuestionDetailsCard from "./QuestionDetailsCard"
 import { useAppDispatch } from "../../redux-hooks"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { getQuestionApi } from "../../Api"
 import { IQuestion } from "../../Types"
@@ -10,11 +10,13 @@ import NoInternet from "../NoInternet"
 import Timeago from 'react-timeago'
 import Loading from "../Loading"
 import AnswerContainer from "../Answer/AnswersContainer"
+import userIcon from '../../assets/user-icon.svg'
 
 
 const Question = () => {
   const [question, setQuestion] = useState<null | IQuestion>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const navigate=useNavigate()
   const dispatch = useAppDispatch()
   const { id } = useParams()
 
@@ -54,7 +56,25 @@ const Question = () => {
             </div>
           </header>
           <QuestionDetailsCard question={question} />
-          <AnswerContainer/>
+          <div className="flex justify-between items-end">
+            <div>
+              <button className="text-sm text-gray-500">Share</button>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500">Asked {new Date(question.askedOn).toLocaleString('en-IN', { month: 'short', day: '2-digit' })} at {new Date(question.askedOn).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
+              <div className="flex gap-2">
+                <div>
+                  {question.author.imageUrl && <img className="w-10" src={question.author.imageUrl} alt="user image" />}
+                  {!question.author.imageUrl && <img className="w-10" src={userIcon} alt="user icon" />}
+                </div>
+                <div className="text-sm">
+                  <p role="button" onClick={()=>navigate(`/users/${question.author._id}`)} className="text-blue-500">{question.author.displayName}</p>
+                  <p>{question.author.reputation}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <AnswerContainer />
         </div>
       }
 

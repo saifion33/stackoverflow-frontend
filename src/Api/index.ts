@@ -30,3 +30,4 @@ export const getAllQuestionsApi=()=>api.get('/questions/all')
 export const getQuestionApi=(questionId:string)=>api.get(`/questions/${questionId}`)
 
 export const postAnswerApi=(answerData:IpostAnswer)=>api.patch('/answers/post',answerData)
+export const getAllAnswersApi=(questionId:string)=>api.get(`/answers/all/${questionId}`)

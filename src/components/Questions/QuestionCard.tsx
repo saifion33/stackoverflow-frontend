@@ -31,7 +31,7 @@ const QuestionCard = ({question}:Iprops) => {
                 {!author.imageUrl &&<img className="w-5 h-5 rounded-sm" src={userIcon} alt="user profile" />}
                 <p role="link" onClick={()=>navigate(`/users/${author._id}`)}  className="cursor-pointer">{author.displayName}</p>
             </div>
-            <p className="text-gray-500">asked {date.toLocaleString('en-IN',{month:'short',year:'numeric'})} at {date.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</p>
+            <p className="text-gray-500">asked {date.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} at {date.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})}</p>
         </div>
     </div>
   )

@@ -84,7 +84,7 @@ export interface IAnswer {
     body: string
     answerOf: string
     author: IAuthor
-    answerOn: string
+    answeredOn: Date
     upVote: string[]
     downVote: string[]
 }
