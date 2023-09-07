@@ -1,23 +1,23 @@
-import { checkNetworkAndSession } from "../../utils/helpers"
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+import { checkNetworkAndSession } from "../../utils/helpers"
+import { useNavigate, useParams } from "react-router-dom"
+import AnswerContainer from "../Answer/AnswersContainer"
 import QuestionDetailsCard from "./QuestionDetailsCard"
 import { useAppDispatch } from "../../redux-hooks"
-import { useNavigate, useParams } from "react-router-dom"
+import userIcon from '../../assets/user-icon.svg'
 import { useEffect, useState } from "react"
 import { getQuestionApi } from "../../Api"
 import { IQuestion } from "../../Types"
 import NoInternet from "../NoInternet"
+import copy from 'copy-to-clipboard'
 import Timeago from 'react-timeago'
 import Loading from "../Loading"
-import AnswerContainer from "../Answer/AnswersContainer"
-import userIcon from '../../assets/user-icon.svg'
-import * as copy from 'copy-to-clipboard'
 
 const Question = () => {
   const [question, setQuestion] = useState<null | IQuestion>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const navigate=useNavigate()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { id } = useParams()
 
   const getQuestionFunction = async () => {
@@ -34,12 +34,13 @@ const Question = () => {
         .finally(() => setLoading(false))
     }
   }
-  const handleCopy=()=>{
-    const questionLink=window.location.href
-    const onCopySuccess=()=>{
-      dispatch(showAlertWithTimeout({message:'Question Link copied.',type:'info'}))
+
+  const handleCopy = () => {
+    const questionLink = window.location.href
+    const onCopySuccess = () => {
+      dispatch(showAlertWithTimeout({ message: 'Question Link copied.', type: 'info' }))
     }
-    copy(questionLink,{onCopy:onCopySuccess})
+    copy(questionLink, { onCopy: onCopySuccess })
   }
 
   useEffect(() => {
@@ -75,13 +76,13 @@ const Question = () => {
                   {!question.author.imageUrl && <img className="w-10" src={userIcon} alt="user icon" />}
                 </div>
                 <div className="text-sm">
-                  <p role="button" onClick={()=>navigate(`/users/${question.author._id}`)} className="text-blue-500">{question.author.displayName}</p>
+                  <p role="button" onClick={() => navigate(`/users/${question.author._id}`)} className="text-blue-500">{question.author.displayName}</p>
                   <p>{question.author.reputation}</p>
                 </div>
               </div>
             </div>
           </div>
-          <AnswerContainer />
+          <AnswerContainer questionAuthorId={question.author._id} />
         </div>
       }
 

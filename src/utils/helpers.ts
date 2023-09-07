@@ -1,7 +1,9 @@
-import { IAnswer, ITags, IUser } from "../Types";
+import {  IJwtPayload, ITags, IUser } from "../Types";
 import AvatarEditor from 'react-avatar-editor'
 import { showAlertWithTimeout } from "../redux/slice/alertSlice";
+import jwtDecode from "jwt-decode";
 import store from "../store";
+import { logout } from "../redux/slice/authSlice";
 export const usersList: IUser[] = [
     { _id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://randomuser.me/api/portraits/med/men/73.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'full stack develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
     { _id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://randomuser.me/api/portraits/med/men/6.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'MERN develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
@@ -15,7 +17,6 @@ export const tags: ITags[] = [
     { id: '4', name: 'C#', description: `C# (pronounced "see sharp") is a high-level, statically typed, multi-paradigm programming language developed by Microsoft. C# code usually targets Microsoft's .NET family of tools and run-times, which include .NET, .NET Framework, .NET MAUI, and Xamarin among others. Use this tag for questions about code written in C# or about C#'s formal specification.`, questionAsked: 0 }
 ]
 
-export const answer: IAnswer = {_id:'dlsfslkd', body: 'HI, define function in javascript like this function functionName(){//some code here}', answerOn: 'Aug 10 at 9:50', author: {_id:'sdfuoef',displayName:'saifi',imageUrl:'https://example.com',reputation:0}, answerOf: '0', downVote:[],upVote:[] }
 
 export const firstBadgeCriteria: { [key: string]: string } = {
     bronze: 'Ask a question that scrore 2 or more to earn your first Bronze badge',
@@ -43,8 +44,10 @@ type CheckType = 'network' | 'session' | 'both';
 export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
 
     const isNetworkConnected = navigator.onLine
-    const isUserLoggedIn = store.getState().auth.user?.token
-
+    const token=store.getState().auth.user?.token
+    const currentTime=Date.now()
+    const isUserLoggedIn =token
+    const isSessionExpire =token  && jwtDecode<IJwtPayload>(token).exp*1000-currentTime<0
     if (check === 'network') {
         if (isNetworkConnected) {
             next();
@@ -53,20 +56,31 @@ export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
         store.dispatch(showAlertWithTimeout({ message: 'Check Your Internet Connection', type: 'warning' }))
     }
     else if (check === 'session') {
-        if (isUserLoggedIn) {
+        if (isUserLoggedIn && !isSessionExpire) {
             next()
             return
         }
-        store.dispatch(showAlertWithTimeout({ message: "Session Expired or You're not logged in.", type: 'warning' }))
+        if (!isUserLoggedIn) {
+            store.dispatch(showAlertWithTimeout({ message: "Login Please", type: 'warning' }))
+        }
+        if (isUserLoggedIn && isSessionExpire) {
+            store.dispatch(showAlertWithTimeout({message:'Session expired.',type:'warning'}))
+            store.dispatch(logout())
+        }
+        
     }
     else if (check === 'both') {
         if (!isUserLoggedIn) {
+            store.dispatch(showAlertWithTimeout({ message: "Login Please.", type: 'warning' }))
+        }
+        if (isUserLoggedIn && isSessionExpire) {
+            store.dispatch(logout());
             store.dispatch(showAlertWithTimeout({ message: "Session Expired", type: 'warning' }))
         }
         if (!isNetworkConnected) {
             store.dispatch(showAlertWithTimeout({ message: "Check your network", type: 'warning' }))
         }
-        if (isNetworkConnected && isUserLoggedIn) {
+        if (isNetworkConnected && isUserLoggedIn && !isSessionExpire) {
             next()
         }
     }

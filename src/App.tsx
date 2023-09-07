@@ -20,6 +20,7 @@ import Users from "./pages/Users"
 import { useEffect } from "react"
 import Home from "./pages/Home"
 import Tags from "./pages/Tags"
+import ReputationAndBadge from "./components/ReputationAndBadge"
 
 
 
@@ -53,6 +54,7 @@ const App = () => {
             <Route path="/users" element={<UsersList />} />
             <Route path="/users/:id" element={<UserProfile />} />
             <Route path="/users/edit/:id" element={<EditUserProfile />} />
+            <Route path="/users/reputation-and-badge" element={<ReputationAndBadge/>} />
           </Route>
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />

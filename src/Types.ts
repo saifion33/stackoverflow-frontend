@@ -86,7 +86,13 @@ export interface IAnswer {
     author: IAuthor
     answeredOn: Date
     upVote: string[]
-    downVote: string[]
+    downVote: string[],
+    isAccepted: boolean
+}
+
+export interface IDeleteAnswer{
+    answerId: string,
+    questionId: string
 }
 
 export interface IServerResponse {

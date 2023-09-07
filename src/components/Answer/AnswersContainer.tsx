@@ -7,7 +7,10 @@ import { getAllAnswers } from '../../redux/actions/answer'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import { checkNetworkAndSession } from '../../utils/helpers'
 
-const AnswerContainer = () => {
+interface IProps{
+    questionAuthorId: string
+}
+const AnswerContainer = ({questionAuthorId}:IProps) => {
     const { id } = useParams()
     const { answers, loading } = useAppSelector(state => state.answers)
     const dispatch = useAppDispatch()
@@ -15,7 +18,7 @@ const AnswerContainer = () => {
         if (questionId) {
             const res = await dispatch(getAllAnswers(questionId))
             if (getAllAnswers.rejected.match(res)) {
-                dispatch(showAlertWithTimeout({ message: res.payload?.message || 'Something went wrong', type: 'error' }))
+                dispatch(showAlertWithTimeout({ message: res.payload?.message || 'Something went wrong', type: 'warning' }))
             }
         }
     }
@@ -32,11 +35,11 @@ const AnswerContainer = () => {
                     <p className="text-xl ">{!answers ? 0 : answers?.length} answer</p>
                 </header>
                 {
-                    (answers && !loading) && answers.map(answer => <AnswerCard key={answer._id} Answer={answer} />)
+                    (answers && !loading) && answers.map(answer => <AnswerCard key={answer._id} Answer={answer} questionAuthorId={questionAuthorId} />)
                 }
             </div>
             <footer>
-                {id && <WriteAnswer questionId={id} />}
+                {id && <WriteAnswer questionId={id} questionAuthorId={questionAuthorId} />}
             </footer>
         </div>
     )

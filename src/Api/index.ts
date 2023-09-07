@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {IAskQuestion, ILoginForm, ISignupForm, IpostAnswer} from '../Types'
+import {IAskQuestion, IDeleteAnswer, ILoginForm, ISignupForm, IpostAnswer} from '../Types'
 
 
 const api=axios.create({
@@ -31,3 +31,4 @@ export const getQuestionApi=(questionId:string)=>api.get(`/questions/${questionI
 
 export const postAnswerApi=(answerData:IpostAnswer)=>api.patch('/answers/post',answerData)
 export const getAllAnswersApi=(questionId:string)=>api.get(`/answers/all/${questionId}`)
+export const deleteAnswerApi=(deleteData:IDeleteAnswer)=>api.delete('/answers/delete',{data:deleteData})

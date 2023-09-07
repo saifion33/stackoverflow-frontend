@@ -23,7 +23,6 @@ export const askQuestion = createAsyncThunk<IResponse, IAskQuestion, { rejectVal
 export const getAllQuestions=createAsyncThunk<IAllQuestions,void,{rejectValue:IServerResponse}>('/questions/all',async(_,thunkApi)=>{
     try {
         const response =await getAllQuestionsApi();
-        console.log(response.data)
         return response.data as IAllQuestions
     } catch (error) {
         const errorMessage=error as {response:{data:IServerResponse}}
