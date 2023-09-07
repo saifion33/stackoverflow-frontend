@@ -107,3 +107,10 @@ export interface IJwtPayload {
     exp: number,
 }
 
+export interface IAcceptAnswer{
+    questionId: string,
+    answerId: string,
+    questionAuthorId: string,
+    answerAuthorId: string,
+}
+

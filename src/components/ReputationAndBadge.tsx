@@ -78,7 +78,7 @@ const ReputationAndBadge = () => {
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Master</p></div>
-                <p className="text-gray-600 text-sm">When you hit 60 reputation</p>
+                <p className="text-gray-600 text-sm">When you hit 100 reputation</p>
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ const ReputationAndBadge = () => {
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#FFCC00] `}></span> <p>Professor</p></div>
-                <p className="text-gray-600 text-sm">When you hit 100 reputation.</p>
+                <p className="text-gray-600 text-sm">When you hit 200 reputation.</p>
               </div>
             </div>
           </div>

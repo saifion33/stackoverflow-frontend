@@ -1,4 +1,4 @@
-import { IAnswer, IDeleteAnswer } from "../../Types"
+import { IAcceptAnswer, IAnswer, IDeleteAnswer } from "../../Types"
 import Votes from "../Questions/Votes"
 import userIcon from '../../assets/user-icon.svg'
 import TimeAgo from 'react-timeago'
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { FaCheckCircle } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "../../redux-hooks"
 import loadingIcon from '../../assets/loading-icon-white.svg'
-import { deleteAnswer } from "../../redux/actions/answer"
+import { acceptAnswer, deleteAnswer } from "../../redux/actions/answer"
 import { checkNetworkAndSession } from "../../utils/helpers"
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
 
@@ -21,6 +21,7 @@ const AnswerCard = ({ Answer, questionAuthorId }: Iprops) => {
     const user = useAppSelector(state => state.auth.user?.profile)
     const {isDeleting,markToDelete}=useAppSelector(state=>state.answers)
     const dispatch=useAppDispatch()
+
     const deleteAnswerFunction=async(data:IDeleteAnswer)=>{
         const res=await dispatch(deleteAnswer(data))
         if (deleteAnswer.fulfilled.match(res)) {
@@ -29,18 +30,32 @@ const AnswerCard = ({ Answer, questionAuthorId }: Iprops) => {
             dispatch(showAlertWithTimeout({message:res.payload?.message || 'Something went wrong.',type:'error'}))
         }
     }
+
+    const acceptAnswerFunction=async(data:IAcceptAnswer)=>{
+        const res=await dispatch(acceptAnswer(data))
+        if (acceptAnswer.rejected.match(res)) {
+            dispatch(showAlertWithTimeout({message:'Something went wrong.',type:'error'}))
+        }
+    }
+    // handle when user clicks delete Answer
     const handleDeleteAnswer=()=>{
        checkNetworkAndSession('both',()=>deleteAnswerFunction({answerId:_id,questionId:answerOf}))
     }
+    // handle when user clicks accept Answer
+    const handleAcceptAnswer=()=>{
+        checkNetworkAndSession('both',()=>acceptAnswerFunction({answerId:_id,questionId:answerOf,answerAuthorId:author._id,questionAuthorId:questionAuthorId}))
+    }
+
     return (
         <div className="">
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-start">
                 <Votes votes={upVote.length - downVote.length} onUpvote={() => alert('upvoted')} onDownvote={() => alert('downvoted')} />
                 <div>{body}</div>
+                {isAccepted && <div className="text-lg text-green-500 flex items-center gap-2"><FaCheckCircle /> Accepted</div>}
             </div>
             <div className="flex justify-between items-center my-3 flex-wrap">
-                {(!isAccepted && questionAuthorId === user?._id) && <button className="py-1 px-2 bg-blue-500 hover:bg-blue-600 text-stone-50 rounded text-sm">Accept Answer</button>}
-                {isAccepted && <div className="text-lg text-green-500 flex items-center gap-2"><FaCheckCircle /> Accepted</div>}
+                {(!isAccepted && questionAuthorId === user?._id) && <button onClick={handleAcceptAnswer} className="py-1 px-2 bg-blue-500 hover:bg-blue-600 text-stone-50 rounded text-sm">Accept Answer</button>}
+                
 
                 <div className="flex justify-end items-center  gap-1 mt-2 text-sm ml-auto">
 
