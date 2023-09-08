@@ -6,36 +6,24 @@ import { useNavigate, useParams } from "react-router-dom"
 import AnswerContainer from "../Answer/AnswersContainer"
 import QuestionDetailsCard from "./QuestionDetailsCard"
 import userIcon from '../../assets/user-icon.svg'
-import { useEffect, useState } from "react"
-import { getQuestionApi } from "../../Api"
-import { IQuestion } from "../../Types"
 import NoInternet from "../NoInternet"
 import copy from 'copy-to-clipboard'
 import Timeago from 'react-timeago'
+import { useEffect } from "react"
 import Loading from "../Loading"
-import { deleteQuestion } from "../../redux/actions/questions"
+import { deleteQuestion, getQuestionById } from "../../redux/actions/questions"
 
 const Question = () => {
-  const [question, setQuestion] = useState<null | IQuestion>(null)
-  const [loading, setLoading] = useState<boolean>(false)
-  const isDeleting = useAppSelector(state => state.questions.isDeleting)
+  const { currentQuestion: question, loading, isDeleting } = useAppSelector(state => state.questions)
   const userId = useAppSelector(state => state.auth.user?.profile?._id)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const getQuestionFunction = async () => {
-    setLoading(true)
-    if (id) {
-      getQuestionApi(id)
-        .then(res => {
-          setQuestion(res.data.data);
-        })
-        .catch(err => {
-          const errMessage = err as { response: { data: { message: string, status: number } } }
-          dispatch(showAlertWithTimeout({ message: errMessage.response.data.message || 'Something went wrong.', type: 'error' }))
-        })
-        .finally(() => setLoading(false))
+  const getQuestionFunction = async (questionId: string) => {
+    const res= await dispatch(getQuestionById(questionId))
+    if (getQuestionById.rejected.match(res)) {
+      dispatch(showAlertWithTimeout({message:res.payload?.message|| 'Something went wrong.',type: 'error'}))
     }
   }
   const deleteQuestionFunction = async (questionId: string) => {
@@ -48,9 +36,9 @@ const Question = () => {
     }
   }
 
-  const handleDelete=()=>{
+  const handleDelete = () => {
     if (question?._id) {
-      checkNetworkAndSession('both',()=>deleteQuestionFunction(question?._id))
+      checkNetworkAndSession('both', () => deleteQuestionFunction(question?._id))
     }
   }
   const handleCopy = () => {
@@ -62,7 +50,9 @@ const Question = () => {
   }
 
   useEffect(() => {
-    checkNetworkAndSession('network', () => getQuestionFunction())
+    if (id) {
+      checkNetworkAndSession('network', () => getQuestionFunction(id))
+    }
     // eslint-disable-next-line
   }, [])
 

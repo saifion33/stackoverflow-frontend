@@ -1,19 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IQuestion } from "../../Types";
-import { askQuestion, deleteQuestion, getAllQuestions } from "../actions/questions";
+import { askQuestion, deleteQuestion, getAllQuestions, getQuestionById } from "../actions/questions";
 
 interface IState {
     loading: boolean
     questions: IQuestion[] | null
     error: null | string
     isDeleting: boolean
+    currentQuestion: IQuestion|null
 }
 
 const initialState: IState = {
     loading: false,
     questions: null,
     error: null,
-    isDeleting: false
+    isDeleting: false,
+    // This is used for when user open question page.
+    currentQuestion:null
 }
 
 const questionsSlice = createSlice({
@@ -38,7 +41,7 @@ const questionsSlice = createSlice({
             state.loading = false;
             state.error=action.payload?.message || action.error.message || 'Unknown Error occurred.'
         })
-         // ****************** Ask Question ************************************
+         // ****************** Delete a question ************************************
          builder.addCase(deleteQuestion.pending, (state) => {
             state.error = null;
             state.isDeleting=true;
@@ -48,6 +51,7 @@ const questionsSlice = createSlice({
             if (state.questions) {
                 state.questions=state.questions.filter(question=>question._id!==action.meta.arg)
             }
+            state.currentQuestion=null;
         })
         builder.addCase(deleteQuestion.rejected, (state, action) => {
             state.isDeleting = false;
@@ -64,6 +68,20 @@ const questionsSlice = createSlice({
             state.questions=action.payload.data
         })
         builder.addCase(getAllQuestions.rejected,(state,action)=>{
+            state.loading=false;
+            state.error=action.payload?.message || action.error.message || 'Unknown Error';
+        })
+        // ****************************** Get A question by Id ****************************
+        builder.addCase(getQuestionById.pending,(state)=>{
+            state.loading=true;
+            state.error=null;
+            state.currentQuestion=null;
+        })
+        builder.addCase(getQuestionById.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.currentQuestion=action.payload.data;
+        })
+        builder.addCase(getQuestionById.rejected,(state,action)=>{
             state.loading=false;
             state.error=action.payload?.message || action.error.message || 'Unknown Error';
         })
