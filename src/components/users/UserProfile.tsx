@@ -43,7 +43,7 @@ const UserProfile = () => {
         }
         // eslint-disable-next-line 
     }, [])
-    return (
+    return ( 
         <section>
             {
                 (!loading && user) && <div>
@@ -99,9 +99,10 @@ const UserProfile = () => {
                             <h2 className="text-2xl ">Badges</h2>
                             <div className="space-y-3 sm:space-y-0 sm:flex gap-2 ">
                                 {
-                                    user.badges && user.badges.map(badge => <BadgeCard isAdmin={isAdmin} key={badge.name} badge={badge} />)
+                                    user.badges && user.badges.map(badge => <BadgeCard  key={badge.name} badge={badge} />)
                                 }
                             </div>
+                            <div>Learn how to earn <span onClick={()=>navigate('/users/reputation-and-badge')} role='link' className='text-blue-500 cursor-pointer'>badge</span> and <span onClick={()=>navigate('/users/reputation-and-badge')} role='link' className='text-blue-500 cursor-pointer'>reputation</span>.</div>
                         </div>
                     </div>
                     <div className="space-y-2">

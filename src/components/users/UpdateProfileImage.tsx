@@ -77,7 +77,7 @@ const UpdateProfileImage = forwardRef(({ imageUrl}: Iprops, ref) => {
     return (
         <div className="image-container max-w-[132px] h-[132px] relative bg-gray-100 rounded  border-2 border-customOrange ">
             {
-                ( selectedProfileImage) && <AvatarEditor ref={editorRef} image={selectedProfileImage} width={128} border={0} height={128} />
+                ( selectedProfileImage) && <AvatarEditor ref={editorRef} image={selectedProfileImage} width={128} border={0} height={128} scale={1.2} />
             }
             
             <label htmlFor="profile-image"><AiFillCamera className="absolute cursor-pointer z-30 text-3xl  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white bg-green-400 rounded-full p-1" /></label>

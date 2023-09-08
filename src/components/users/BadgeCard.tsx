@@ -1,4 +1,3 @@
-import { firstBadgeCriteria } from '../../utils/helpers'
 import bronzeBadge from '../../assets/bronze-badge.svg'
 import silverBadge from '../../assets/silver-badge.svg'
 import goldBadge from '../../assets/gold-badge.svg'
@@ -6,9 +5,8 @@ import { IBadge } from '../../Types'
 
 interface IProps{
     badge: IBadge,
-    isAdmin: boolean
 }
-const BadgeCard = ({badge,isAdmin}:IProps) => {
+const BadgeCard = ({badge}:IProps) => {
     
     const badgeIcon:{[key:string]:string}={
         bronze:bronzeBadge,
@@ -33,9 +31,6 @@ const BadgeCard = ({badge,isAdmin}:IProps) => {
             <div className="pt-5 flex  flex-wrap gap-3">
                 {
                     badge.badgesList.length>=1 && badge.badgesList.map(badgeName=><div key={badgeName} className="py-1 px-3 rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[${badgeCircleColer[badge.name]}] `}></span> <p>{badgeName}</p></div>)
-                }
-                {
-                    (badge.count<=0 && isAdmin )&& <p className='text-center text-sm'>{firstBadgeCriteria[badge.name]}</p>
                 }
             </div>
         </div>

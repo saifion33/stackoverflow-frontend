@@ -21,7 +21,6 @@ const AnswerCard = ({ Answer, questionAuthorId }: Iprops) => {
     const user = useAppSelector(state => state.auth.user?.profile)
     const {isDeleting,markToDelete}=useAppSelector(state=>state.answers)
     const dispatch=useAppDispatch()
-
     const deleteAnswerFunction=async(data:IDeleteAnswer)=>{
         const res=await dispatch(deleteAnswer(data))
         if (deleteAnswer.fulfilled.match(res)) {
@@ -50,7 +49,7 @@ const AnswerCard = ({ Answer, questionAuthorId }: Iprops) => {
         <div className="">
             <div className="flex gap-2 items-start">
                 <Votes votes={upVote.length - downVote.length} onUpvote={() => alert('upvoted')} onDownvote={() => alert('downvoted')} />
-                <div>{body}</div>
+                <div className="whitespace-pre-line">{body}</div>
                 {isAccepted && <div className="text-lg text-green-500 flex items-center gap-2"><FaCheckCircle /> Accepted</div>}
             </div>
             <div className="flex justify-between items-center my-3 flex-wrap">
