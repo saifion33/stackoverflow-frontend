@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IQuestion } from "../../Types";
-import { askQuestion, getAllQuestions } from "../actions/questions";
+import { askQuestion, deleteQuestion, getAllQuestions } from "../actions/questions";
 
 interface IState {
     loading: boolean
     questions: IQuestion[] | null
     error: null | string
+    isDeleting: boolean
 }
 
 const initialState: IState = {
     loading: false,
     questions: null,
-    error: null
+    error: null,
+    isDeleting: false
 }
 
 const questionsSlice = createSlice({
@@ -34,6 +36,21 @@ const questionsSlice = createSlice({
         })
         builder.addCase(askQuestion.rejected, (state, action) => {
             state.loading = false;
+            state.error=action.payload?.message || action.error.message || 'Unknown Error occurred.'
+        })
+         // ****************** Ask Question ************************************
+         builder.addCase(deleteQuestion.pending, (state) => {
+            state.error = null;
+            state.isDeleting=true;
+        })
+        builder.addCase(deleteQuestion.fulfilled, (state, action) => {
+            state.isDeleting = false;
+            if (state.questions) {
+                state.questions=state.questions.filter(question=>question._id!==action.meta.arg)
+            }
+        })
+        builder.addCase(deleteQuestion.rejected, (state, action) => {
+            state.isDeleting = false;
             state.error=action.payload?.message || action.error.message || 'Unknown Error occurred.'
         })
 

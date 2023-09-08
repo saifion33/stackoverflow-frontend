@@ -1,9 +1,10 @@
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+import { useAppDispatch, useAppSelector } from "../../redux-hooks"
+import loadingIcon from '../../assets/loading-icon-white.svg'
 import { checkNetworkAndSession } from "../../utils/helpers"
 import { useNavigate, useParams } from "react-router-dom"
 import AnswerContainer from "../Answer/AnswersContainer"
 import QuestionDetailsCard from "./QuestionDetailsCard"
-import { useAppDispatch } from "../../redux-hooks"
 import userIcon from '../../assets/user-icon.svg'
 import { useEffect, useState } from "react"
 import { getQuestionApi } from "../../Api"
@@ -12,10 +13,13 @@ import NoInternet from "../NoInternet"
 import copy from 'copy-to-clipboard'
 import Timeago from 'react-timeago'
 import Loading from "../Loading"
+import { deleteQuestion } from "../../redux/actions/questions"
 
 const Question = () => {
   const [question, setQuestion] = useState<null | IQuestion>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const isDeleting = useAppSelector(state => state.questions.isDeleting)
+  const userId = useAppSelector(state => state.auth.user?.profile?._id)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -34,7 +38,21 @@ const Question = () => {
         .finally(() => setLoading(false))
     }
   }
+  const deleteQuestionFunction = async (questionId: string) => {
+    const res = await dispatch(deleteQuestion(questionId))
+    if (deleteQuestion.fulfilled.match(res)) {
+      dispatch(showAlertWithTimeout({ message: "Question deleted successfully.", type: 'success' }))
+      navigate('/questions')
+    } else if (deleteQuestion.rejected.match(res)) {
+      dispatch(showAlertWithTimeout({ message: res.payload?.message || 'Something went wrong', type: 'error' }))
+    }
+  }
 
+  const handleDelete=()=>{
+    if (question?._id) {
+      checkNetworkAndSession('both',()=>deleteQuestionFunction(question?._id))
+    }
+  }
   const handleCopy = () => {
     const questionLink = window.location.href
     const onCopySuccess = () => {
@@ -65,7 +83,9 @@ const Question = () => {
           </header>
           <QuestionDetailsCard question={question} />
           <div className="flex justify-between items-end">
-            <div>
+            <div className="flex items-center gap-2">
+              {(!isDeleting && question.author._id == userId) && <button onClick={handleDelete} className="text-sm text-gray-500">Delete</button>}
+              {isDeleting && <div className="flex items-center gap-1 py-1 px-2 rounded bg-blue-500 text-stone-50">Deleting<img className="w-5" src={loadingIcon} alt="loading icon " /></div>}
               <button onClick={handleCopy} className="text-sm text-gray-500">Share</button>
             </div>
             <div>

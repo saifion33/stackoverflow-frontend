@@ -26,6 +26,7 @@ export const getUserById=(userId:string)=>api.get(`/users/${userId}`)
 export const updateUser=(updates:FormData)=>api.patch('/users/update',updates)
 
 export const askQuestionApi=(questionData:IAskQuestion)=>api.post('/questions/ask',questionData)
+export const deleteQuestionApi=(questionId:string)=>api.delete(`/questions/delete/${questionId}`)
 export const getAllQuestionsApi=()=>api.get('/questions/all')
 export const getQuestionApi=(questionId:string)=>api.get(`/questions/${questionId}`)
 

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { askQuestionApi, getAllQuestionsApi } from "../../Api";
+import { askQuestionApi, deleteQuestionApi, getAllQuestionsApi } from "../../Api";
 import { IAskQuestion, IQuestion, IServerResponse } from "../../Types";
 
 interface IResponse extends IServerResponse {
@@ -16,6 +16,16 @@ export const askQuestion = createAsyncThunk<IResponse, IAskQuestion, { rejectVal
         return response.data as IResponse
     } catch (error) {
         const errorMessage = error as { response: { data: IServerResponse } }
+        return thunkApi.rejectWithValue(errorMessage.response.data)
+    }
+})
+
+export const deleteQuestion=createAsyncThunk<IServerResponse,string,{rejectValue:IServerResponse}>('/questions/delete',async(questionId,thunkApi)=>{
+    try {
+        const response =await deleteQuestionApi(questionId);
+        return response.data
+    } catch (error) {
+        const errorMessage=error as {response:{data:IServerResponse}}
         return thunkApi.rejectWithValue(errorMessage.response.data)
     }
 })
