@@ -18,30 +18,30 @@ const QuestionDetailsCard = ({ question }: Iprops) => {
         const upVoteFunction = () => {
             if (userId) {
                 const voteData: IVoteData = { id: question._id, userId, voteType: 'upVote' }
-                 // dispatch the vote Question reducer for imidiate change in vote count
+                // dispatch the vote Question reducer for imidiate change in vote count
                 dispatch(voteQuestion(voteData))
-                voteQuestionApi(voteData).catch((error)=>{
-                    dispatch(showAlertWithTimeout({message:error.message||'Something went wrong',type:'error'}))
-                     // if any error then vote count will be reset.
+                voteQuestionApi(voteData).catch((error) => {
+                    dispatch(showAlertWithTimeout({ message: error.message || 'Something went wrong', type: 'error' }))
+                    // if any error then vote count will be reset.
                     dispatch(voteQuestion(voteData))
                 })
             }
         }
         checkNetworkAndSession('both', () => upVoteFunction())
     }
+
     const handleDownVote = () => {
         const downVoteFunction = () => {
             if (userId) {
                 const voteData: IVoteData = { id: question._id, userId, voteType: 'downVote' }
                 // dispatch the vote Question reducer for imidiate change in vote count
                 dispatch(voteQuestion(voteData))
-                voteQuestionApi(voteData).catch((error)=>{
-                    dispatch(showAlertWithTimeout({message:error.message||'Something went wrong',type:'error'}))
+                voteQuestionApi(voteData).catch((error) => {
+                    dispatch(showAlertWithTimeout({ message: error.message || 'Something went wrong', type: 'error' }))
                     // if any error then vote count will be reset.
                     dispatch(voteQuestion(voteData))
                 })
             }
-
         }
         checkNetworkAndSession('both', () => downVoteFunction())
     }

@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { askQuestionApi, deleteQuestionApi, getAllQuestionsApi, getQuestionApi} from "../../Api";
-import { IAskQuestion, IQuestion, IServerResponse} from "../../Types";
+import { askQuestionApi, deleteQuestionApi, getAllQuestionsApi, getQuestionApi } from "../../Api";
+import { IAskQuestion, IQuestion, IServerResponse } from "../../Types";
 
 interface IResponse extends IServerResponse {
     data: IQuestion
 }
-interface IAllQuestions extends IServerResponse{
-    data:IQuestion[]
+interface IAllQuestions extends IServerResponse {
+    data: IQuestion[]
 }
 
 export const askQuestion = createAsyncThunk<IResponse, IAskQuestion, { rejectValue: IServerResponse }>('/questions/ask', async (questionData, thunkApi) => {
@@ -20,32 +20,32 @@ export const askQuestion = createAsyncThunk<IResponse, IAskQuestion, { rejectVal
     }
 })
 
-export const deleteQuestion=createAsyncThunk<IServerResponse,string,{rejectValue:IServerResponse}>('/questions/delete',async(questionId,thunkApi)=>{
+export const deleteQuestion = createAsyncThunk<IServerResponse, string, { rejectValue: IServerResponse }>('/questions/delete', async (questionId, thunkApi) => {
     try {
-        const response =await deleteQuestionApi(questionId);
+        const response = await deleteQuestionApi(questionId);
         return response.data
     } catch (error) {
-        const errorMessage=error as {response:{data:IServerResponse}}
+        const errorMessage = error as { response: { data: IServerResponse } }
         return thunkApi.rejectWithValue(errorMessage.response.data)
     }
 })
 
-export const getAllQuestions=createAsyncThunk<IAllQuestions,void,{rejectValue:IServerResponse}>('/questions/all',async(_,thunkApi)=>{
+export const getAllQuestions = createAsyncThunk<IAllQuestions, void, { rejectValue: IServerResponse }>('/questions/all', async (_, thunkApi) => {
     try {
-        const response =await getAllQuestionsApi();
+        const response = await getAllQuestionsApi();
         return response.data as IAllQuestions
     } catch (error) {
-        const errorMessage=error as {response:{data:IServerResponse}}
+        const errorMessage = error as { response: { data: IServerResponse } }
         return thunkApi.rejectWithValue(errorMessage.response.data)
     }
 })
 
-export const getQuestionById=createAsyncThunk<IResponse,string,{rejectValue:IServerResponse}>('/questions/:questionId',async(questionId,thunkApi)=>{
+export const getQuestionById = createAsyncThunk<IResponse, string, { rejectValue: IServerResponse }>('/questions/:questionId', async (questionId, thunkApi) => {
     try {
-        const response =await getQuestionApi(questionId)
+        const response = await getQuestionApi(questionId)
         return response.data
     } catch (error) {
-        const errorMessage=error as {response:{data:IServerResponse}}
+        const errorMessage = error as { response: { data: IServerResponse } }
         return thunkApi.rejectWithValue(errorMessage.response.data)
     }
 })
