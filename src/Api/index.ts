@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, ISignupForm, IpostAnswer} from '../Types'
+import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, ISignupForm, IVoteData, IpostAnswer} from '../Types'
 
 
 const api=axios.create({
@@ -29,6 +29,7 @@ export const askQuestionApi=(questionData:IAskQuestion)=>api.post('/questions/as
 export const deleteQuestionApi=(questionId:string)=>api.delete(`/questions/delete/${questionId}`)
 export const getAllQuestionsApi=()=>api.get('/questions/all')
 export const getQuestionApi=(questionId:string)=>api.get(`/questions/${questionId}`)
+export const voteQuestionApi=(voteData:IVoteData)=>api.patch('/questions/vote',voteData)
 
 export const postAnswerApi=(answerData:IpostAnswer)=>api.patch('/answers/post',answerData)
 export const getAllAnswersApi=(questionId:string)=>api.get(`/answers/all/${questionId}`)

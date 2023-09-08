@@ -74,6 +74,12 @@ export interface IQuestion extends IAskQuestion {
     author: IAuthor
 }
 
+export interface IVoteData{
+    id: string,
+    userId:string,
+    voteType: 'upVote'|'downVote'
+}
+
 export interface IpostAnswer{
     questionId: string
     answerBody: string

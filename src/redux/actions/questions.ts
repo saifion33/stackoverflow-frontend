@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { askQuestionApi, deleteQuestionApi, getAllQuestionsApi, getQuestionApi } from "../../Api";
-import { IAskQuestion, IQuestion, IServerResponse } from "../../Types";
+import { askQuestionApi, deleteQuestionApi, getAllQuestionsApi, getQuestionApi} from "../../Api";
+import { IAskQuestion, IQuestion, IServerResponse} from "../../Types";
 
 interface IResponse extends IServerResponse {
     data: IQuestion
