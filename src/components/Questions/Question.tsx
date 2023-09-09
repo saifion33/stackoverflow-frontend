@@ -9,7 +9,7 @@ import userIcon from '../../assets/user-icon.svg'
 import NoInternet from "../NoInternet"
 import copy from 'copy-to-clipboard'
 import Timeago from 'react-timeago'
-import { useEffect } from "react"
+import { useEffect,useCallback } from "react"
 import Loading from "../Loading"
 import { deleteQuestion, getQuestionById } from "../../redux/actions/questions"
 
@@ -26,7 +26,7 @@ const Question = () => {
       dispatch(showAlertWithTimeout({message:res.payload?.message|| 'Something went wrong.',type: 'error'}))
     }
   }
-  const deleteQuestionFunction = async (questionId: string) => {
+  const deleteQuestionFunction = useCallback(async (questionId: string) => {
     const res = await dispatch(deleteQuestion(questionId))
     if (deleteQuestion.fulfilled.match(res)) {
       dispatch(showAlertWithTimeout({ message: "Question deleted successfully.", type: 'success' }))
@@ -34,7 +34,8 @@ const Question = () => {
     } else if (deleteQuestion.rejected.match(res)) {
       dispatch(showAlertWithTimeout({ message: res.payload?.message || 'Something went wrong', type: 'error' }))
     }
-  }
+    // eslint-disable-next-line
+  },[])
 
   const handleDelete = () => {
     if (question?._id) {

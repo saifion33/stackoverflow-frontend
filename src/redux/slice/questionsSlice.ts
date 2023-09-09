@@ -25,7 +25,7 @@ const questionsSlice = createSlice({
     reducers: {
         voteQuestion: (state, action: PayloadAction<IVoteData>) => {
             if (state.currentQuestion) {
-                const duplicateQuestion = state.currentQuestion;
+                const duplicateQuestion = {...state.currentQuestion}
                 const userId = action.payload.userId;
                 const questionId = action.payload.id;
                 const voteType = action.payload.voteType;
@@ -35,25 +35,32 @@ const questionsSlice = createSlice({
                     if (voteType === 'upVote') {
                         if (!isUpvoted) {
                             duplicateQuestion.upVote.push(userId)
+                            duplicateQuestion.author.reputation+=6;
                         }
                         if (isUpvoted) {
                             duplicateQuestion.upVote = duplicateQuestion.upVote.filter(id => id !== userId)
+                            duplicateQuestion.author.reputation-=6;
                         }
                         if (isDownVoted) {
                             duplicateQuestion.downVote = duplicateQuestion.downVote.filter(id => id !== userId)
+                            duplicateQuestion.author.reputation+=2;
                         }
                     }else if (voteType==='downVote'){
                         if (!isDownVoted) {
                             duplicateQuestion.downVote.push(userId)
+                            duplicateQuestion.author.reputation-=2;
                         }
                         if (isDownVoted) {
                             duplicateQuestion.downVote = duplicateQuestion.downVote.filter(id => id !== userId)
+                            duplicateQuestion.author.reputation+=2;
                         }
                         if (isUpvoted) {
                             duplicateQuestion.upVote = duplicateQuestion.upVote.filter(id => id !== userId)
+                            duplicateQuestion.author.reputation-=6;
                         }
                     }
                 }
+                state.currentQuestion=duplicateQuestion
             }
         },
         

@@ -10,6 +10,7 @@ import NoInternet from '../NoInternet'
 import BadgeCard from "./BadgeCard"
 import { IUser } from '../../Types'
 import Loading from '../Loading'
+import {useCallback} from 'react'
 
 const UserProfile = () => {
     const [user, setUser] = useState<IUser | null>(null)
@@ -24,7 +25,8 @@ const UserProfile = () => {
     const handleImageLoadingFailed = () => {
         setImageError(false)
     }
-    const getUser = async (userId: string) => {
+    
+    const getUser = useCallback(async (userId: string) => {
         setLoading(true)
         try {
             const user = await getUserById(userId)
@@ -36,13 +38,15 @@ const UserProfile = () => {
             dispatch(showAlertWithTimeout({ message: reqError.response.data.message, type: 'error' }))
         }
         setLoading(false)
-    }
+        //eslint-disable-next-line
+    },[])
+
     useEffect(() => {
         if (id && navigator.onLine) {
             getUser(id)
         }
-        // eslint-disable-next-line 
-    }, [])
+    }, [id,getUser])
+    
     return ( 
         <section>
             {

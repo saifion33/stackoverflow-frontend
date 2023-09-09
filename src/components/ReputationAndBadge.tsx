@@ -62,15 +62,15 @@ const ReputationAndBadge = () => {
             <div className="divide-y-2">
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Good Question</p></div>
-                <p className="text-gray-600 text-sm">when your any question get 8 upvotes first time.</p>
+                <p className="text-gray-600 text-sm">when your any question get 10 upvotes first time.</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Good Answer</p></div>
-                <p className="text-gray-600 text-sm">When your any answer get 8 upvotes first time.</p>
+                <p className="text-gray-600 text-sm">When your any answer get 10 upvotes first time.</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Voter</p></div>
-                <p className="text-gray-600 text-sm">when you vote 15 question.</p>
+                <p className="text-gray-600 text-sm">when you upvote 15 question.</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Knowledge Seeker</p></div>
@@ -87,15 +87,15 @@ const ReputationAndBadge = () => {
             <div className="divide-y-2">
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#FFCC00] `}></span> <p>Great Question</p></div>
-                <p className="text-gray-600 text-sm">When your any question get 15 upvotes first time.</p>
+                <p className="text-gray-600 text-sm">When your any question get 20 upvotes first time.</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#FFCC00] `}></span> <p>Great Answer</p></div>
-                <p className="text-gray-600 text-sm">When your any answer get 15 upvotes first time.</p>
+                <p className="text-gray-600 text-sm">When your any answer get 20 upvotes first time.</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#FFCC00] `}></span> <p>Accepter</p></div>
-                <p className="text-gray-600 text-sm">When your 10 answer Accepted.</p>
+                <p className="text-gray-600 text-sm">When your 20 answer Accepted.</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#FFCC00] `}></span> <p>Professor</p></div>

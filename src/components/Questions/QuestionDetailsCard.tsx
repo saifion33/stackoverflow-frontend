@@ -15,32 +15,38 @@ const QuestionDetailsCard = ({ question }: Iprops) => {
     const dispatch = useAppDispatch()
 
     const handleUpVote = () => {
-        const upVoteFunction = () => {
+        const upVoteFunction = async() => {
             if (userId) {
                 const voteData: IVoteData = { id: question._id, userId, voteType: 'upVote' }
                 // dispatch the vote Question reducer for imidiate change in vote count
                 dispatch(voteQuestion(voteData))
-                voteQuestionApi(voteData).catch((error) => {
-                    dispatch(showAlertWithTimeout({ message: error.message || 'Something went wrong', type: 'error' }))
+                try {
+                    await voteQuestionApi(voteData)
+                } catch (error) {
+                   const errorMessage= error as {response:{data:{message:string,status:number}}}
+                    dispatch(showAlertWithTimeout({ message: errorMessage.response.data.message|| 'Something went wrong', type: 'error' }))
                     // if any error then vote count will be reset.
                     dispatch(voteQuestion(voteData))
-                })
+                }
             }
         }
         checkNetworkAndSession('both', () => upVoteFunction())
     }
 
     const handleDownVote = () => {
-        const downVoteFunction = () => {
+        const downVoteFunction = async() => {
             if (userId) {
                 const voteData: IVoteData = { id: question._id, userId, voteType: 'downVote' }
                 // dispatch the vote Question reducer for imidiate change in vote count
                 dispatch(voteQuestion(voteData))
-                voteQuestionApi(voteData).catch((error) => {
-                    dispatch(showAlertWithTimeout({ message: error.message || 'Something went wrong', type: 'error' }))
+                try {
+                    await voteQuestionApi(voteData)
+                } catch (error) {
+                   const errorMessage= error as {response:{data:{message:string,status:number}}}
+                    dispatch(showAlertWithTimeout({ message: errorMessage.response.data.message|| 'Something went wrong', type: 'error' }))
                     // if any error then vote count will be reset.
                     dispatch(voteQuestion(voteData))
-                })
+                }
             }
         }
         checkNetworkAndSession('both', () => downVoteFunction())
