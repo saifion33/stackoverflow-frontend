@@ -1,5 +1,6 @@
 import Navbar from "./components/Navbar/Navbar"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import ReputationAndBadge from "./components/ReputationAndBadge"
 import EditUserProfile from "./components/users/EditUserProfile"
 import AllQuestions from "./components/Questions/AllQuestions"
 import { useAppDispatch, useAppSelector } from "./redux-hooks"
@@ -20,7 +21,6 @@ import Users from "./pages/Users"
 import { useEffect } from "react"
 import Home from "./pages/Home"
 import Tags from "./pages/Tags"
-import ReputationAndBadge from "./components/ReputationAndBadge"
 
 
 
@@ -59,7 +59,7 @@ const App = () => {
           <Route path="/users/signup" element={<Signup />} />
           <Route path="/users/login" element={<Login />} />
           <Route path="/users/account-recovery" element={<ForgotPassword />} />
-          <Route path="/account/recover" element={<ResetPassword />} />
+          <Route path="/account/recover/:token" element={<ResetPassword />} />
           <Route path="/tags" element={<PageContainer><Tags /></PageContainer>} />
           <Route path="/questions" element={<PageContainer><Questions /></PageContainer>} >
             <Route path="/questions" element={<AllQuestions />} />
@@ -68,7 +68,6 @@ const App = () => {
           </Route>
         </Routes>
       </Router>
-
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import {  IJwtPayload, ITags, IUser } from "../Types";
+import { IJwtPayload, ITags, IUser } from "../Types";
 import AvatarEditor from 'react-avatar-editor'
 import { showAlertWithTimeout } from "../redux/slice/alertSlice";
 import jwtDecode from "jwt-decode";
@@ -44,10 +44,10 @@ type CheckType = 'network' | 'session' | 'both';
 export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
 
     const isNetworkConnected = navigator.onLine
-    const token=store.getState().auth.user?.token
-    const currentTime=Date.now()
-    const isUserLoggedIn =token
-    const isSessionExpire =token  && jwtDecode<IJwtPayload>(token).exp*1000-currentTime<0
+    const token = store.getState().auth.user?.token
+    const currentTime = Date.now()
+    const isUserLoggedIn = token
+    const isSessionExpire = token && jwtDecode<IJwtPayload>(token).exp * 1000 - currentTime < 0
     if (check === 'network') {
         if (isNetworkConnected) {
             next();
@@ -64,10 +64,10 @@ export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
             store.dispatch(showAlertWithTimeout({ message: "Login Please", type: 'warning' }))
         }
         if (isUserLoggedIn && isSessionExpire) {
-            store.dispatch(showAlertWithTimeout({message:'Session expired.',type:'warning'}))
+            store.dispatch(showAlertWithTimeout({ message: 'Session expired.', type: 'warning' }))
             store.dispatch(logout())
         }
-        
+
     }
     else if (check === 'both') {
         if (!isUserLoggedIn) {
@@ -87,3 +87,44 @@ export const checkNetworkAndSession = (check: CheckType, next: () => void) => {
 
 }
 
+export const detectOs = () => {
+    let operatingSystem = "Unknown OS";
+    if (navigator.userAgent.indexOf("Win") !== -1) {
+        operatingSystem = "Windows";
+    } else if (navigator.userAgent.indexOf("Mac") !== -1) {
+        operatingSystem = "MacOS";
+    } else if (navigator.userAgent.indexOf("Android") !== -1) {
+        operatingSystem = "Android";
+    } else if (navigator.userAgent.indexOf("iOS") !== -1) {
+        operatingSystem = "iOS";
+    } else if (navigator.userAgent.indexOf("Linux") !== -1 || navigator.userAgent.indexOf("X11") !== -1) {
+        if (navigator.userAgent.indexOf("Android") === -1) {
+            operatingSystem = "Linux";
+        }
+    }
+    return operatingSystem
+}
+
+export const detectBrowser = () => {
+    let browser = "Unknown Browser";
+    if (navigator.userAgent.indexOf("Edge") !== -1) {
+        browser = "Edge";
+    } else if (navigator.userAgent.indexOf("Chrome") !== -1) {
+        if (navigator.userAgent.indexOf("Edg") !== -1) {
+            browser = "Edge";
+        } else {
+            browser = "Chrome";
+        }
+    } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+        browser = "Firefox";
+    } else if (navigator.userAgent.indexOf("Opera") !== -1 || navigator.userAgent.indexOf("OPR") !== -1) {
+        browser = "Opera";
+    } else if (navigator.userAgent.indexOf("Safari") !== -1) {
+        browser = "Safari";
+    } else if (navigator.userAgent.indexOf("MSIE") !== -1 || navigator.userAgent.indexOf("Trident") !== -1) {
+        browser = "Internet Explorer";
+    } else if (navigator.userAgent.includes('brave')) {
+        return 'Brave';
+    }
+    return browser
+}

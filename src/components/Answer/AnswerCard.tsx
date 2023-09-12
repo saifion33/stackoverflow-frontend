@@ -1,4 +1,4 @@
-import { IAcceptAnswer, IAnswer, IDeleteAnswer } from "../../Types"
+import { IAcceptAnswer, IAnswer, IDeleteAnswer, IVoteAnswerData } from "../../Types"
 import Votes from "../Questions/Votes"
 import userIcon from '../../assets/user-icon.svg'
 import TimeAgo from 'react-timeago'
@@ -9,6 +9,8 @@ import loadingIcon from '../../assets/loading-icon-white.svg'
 import { acceptAnswer, deleteAnswer } from "../../redux/actions/answer"
 import { checkNetworkAndSession } from "../../utils/helpers"
 import { showAlertWithTimeout } from "../../redux/slice/alertSlice"
+import { voteAnswer } from "../../redux/slice/answersSlice"
+import { voteAnswerApi } from "../../Api"
 
 interface Iprops {
     Answer: IAnswer,
@@ -44,11 +46,27 @@ const AnswerCard = ({ Answer, questionAuthorId }: Iprops) => {
     const handleAcceptAnswer=()=>{
         checkNetworkAndSession('both',()=>acceptAnswerFunction({answerId:_id,questionId:answerOf,answerAuthorId:author._id,questionAuthorId:questionAuthorId}))
     }
+    const voteAnswerFunction=async(voteData:IVoteAnswerData)=>{
+        dispatch(voteAnswer(voteData))
+        try {
+            await voteAnswerApi(voteData) 
+        } catch (error) {
+            const errorMessage=error as {response:{data:{status:number,message:string}}}
+            dispatch(voteAnswer(voteData))
+            dispatch(showAlertWithTimeout({message:errorMessage.response.data.message||'Something went wrong.',type:'error'}))
+        }
+    }
+    const handleUpVote=()=>{
+        checkNetworkAndSession('both',()=>voteAnswerFunction({id:_id,answerAuthorId:author._id,questionId:answerOf,userId:user?._id||'',voteType:'upVote'}))
+    }
+    const handleDownVote=()=>{
+        checkNetworkAndSession('both',()=>voteAnswerFunction({id:_id,answerAuthorId:author._id,questionId:answerOf,userId:user?._id||'',voteType:'downVote'}))
+    }
 
     return (
         <div className="">
             <div className="flex gap-2 items-start">
-                <Votes votes={upVote.length - downVote.length} onUpvote={() => alert('upvoted')} onDownvote={() => alert('downvoted')} />
+                <Votes votes={upVote.length - downVote.length} onUpvote={handleUpVote} onDownvote={handleDownVote} />
                 <div className="whitespace-pre-line">{body}</div>
                 {isAccepted && <div className="text-lg text-green-500 flex items-center gap-2"><FaCheckCircle /> Accepted</div>}
             </div>

@@ -25,7 +25,7 @@ const ReputationAndBadge = () => {
           <li>When your question downvoted -2</li>
           <li>When your answer downvoted -2 </li>
           <li>When you delete an answer downvoted -5 </li>
-          <li>when you downvote question or answer -1 reputation</li>
+          <li>when you downvote question or answer -2 reputation</li>
         </ul>
       </div>
       <div className="flex flex-col gap-2">
@@ -70,7 +70,7 @@ const ReputationAndBadge = () => {
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Voter</p></div>
-                <p className="text-gray-600 text-sm">when you upvote 15 question.</p>
+                <p className="text-gray-600 text-sm">when you upvote 15 question or answer</p>
               </div>
               <div className="p-2">
                 <div className="py-1 px-2 w-fit rounded-sm flex items-center gap-1 bg-slate-600 text-stone-50 text-xs"><span className={`inline-block w-2 h-2 rounded-full bg-[#B3B8BC] `}></span> <p>Knowledge Seeker</p></div>

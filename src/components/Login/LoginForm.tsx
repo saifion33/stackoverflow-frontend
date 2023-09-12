@@ -21,24 +21,24 @@ const LoginForm = () => {
         email: '',
         password: ''
     }
-    const logInFunction=(values:ILoginForm)=>{
+    const logInFunction = (values: ILoginForm) => {
         dispatch(login(values))
-        .then(res => {
-            if (login.fulfilled.match(res)) {
-                const token = res.payload.data.token
-                token && handleAutoLogout(token)
-                navigate('/')
-            }
-            else if (login.rejected.match(res)) {
-                const alertMessage = res.payload?.message
-                if (alertMessage) {
-                    dispatch(showAlertWithTimeout({message:alertMessage,type:'error'}))
+            .then(res => {
+                if (login.fulfilled.match(res)) {
+                    const token = res.payload.data.token
+                    token && handleAutoLogout(token)
+                    navigate('/')
                 }
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        })
+                else if (login.rejected.match(res)) {
+                    const alertMessage = res.payload?.message
+                    if (alertMessage) {
+                        dispatch(showAlertWithTimeout({ message: alertMessage, type: 'error' }))
+                    }
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
     const handleAutoLogout = (token: string) => {
         const tokenTime = jwtDecode<IJwtPayload>(token).exp * 1000
@@ -51,9 +51,9 @@ const LoginForm = () => {
             dispatch(logout())
         }
     }
-    
+
     const handleSubmit = async (values: ILoginForm) => {
-        checkNetworkAndSession('network',()=>logInFunction(values))
+        checkNetworkAndSession('network', () => logInFunction(values))
     }
 
     const ValidationSchema = yup.object({
@@ -71,7 +71,10 @@ const LoginForm = () => {
                             <ErrorMessage name='email' className='text-red-600 text-xs' component={'div'} />
                         </div>
                         <div className='my-3'>
-                            <label htmlFor="password">Password</label>
+                            <div className='flex justify-between items-center'>
+                                <label htmlFor="password">Password</label>
+                                <p onClick={()=>navigate('/users/account-recovery')} role='link' className='text-blue-600 text-xs cursor-pointer'>forgot password?</p>
+                            </div>
                             <Field type="password" name="password" className="border-[1px] rounded p-1 w-full focus:outline-4 focus:outline outline-blue-100 " />
                             <ErrorMessage name='password' className='text-red-600 text-xs' component={'div'} />
                         </div>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, ISignupForm, IVoteData, IpostAnswer} from '../Types'
+import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, IResetPassword, ISignupForm, IVoteAnswerData, IVoteData, IforgetPassword, IpostAnswer} from '../Types'
 
 
 const api=axios.create({
@@ -20,6 +20,8 @@ api.interceptors.request.use((config)=>{
 
 export const signUpUser=(data:ISignupForm)=>api.post('/auth/signup', data)
 export const logInUser=(data:ILoginForm)=>api.post('/auth/login', data)
+export const forgetPasswordApi=(data:IforgetPassword)=>api.patch('/auth/forgetPassword',data)
+export const resetPasswordApi=(data:IResetPassword)=>api.patch('/auth/resetPassword',data)
 
 export const getAllUsers=()=>api.get('/users/all')
 export const getUserById=(userId:string)=>api.get(`/users/${userId}`)
@@ -35,3 +37,4 @@ export const postAnswerApi=(answerData:IpostAnswer)=>api.patch('/answers/post',a
 export const getAllAnswersApi=(questionId:string)=>api.get(`/answers/all/${questionId}`)
 export const deleteAnswerApi=(deleteData:IDeleteAnswer)=>api.delete('/answers/delete',{data:deleteData})
 export const acceptAnswerApi=(answerData:IAcceptAnswer)=>api.patch('/answers/accept',answerData)
+export const voteAnswerApi=(voteData:IVoteAnswerData)=>api.patch('/answers/vote',voteData)

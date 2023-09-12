@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { IAnswer } from "../../Types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IAnswer, IVoteAnswerData } from "../../Types";
 import { acceptAnswer, deleteAnswer, getAllAnswers, postAnswer } from "../actions/answer";
 
 interface IState {
@@ -24,7 +24,52 @@ const answersSlice = createSlice({
     name: 'answers',
     initialState,
     reducers: {
-
+        voteAnswer: (state, action: PayloadAction<IVoteAnswerData>) => {
+            if (state.answers) {
+                const answer = state.answers.find(answer => answer._id === action.payload.id)
+                if (answer) {
+                    const duplicateAnswer = { ...answer }
+                    const userId = action.payload.userId;
+                    const answerId = action.payload.id;
+                    const voteType = action.payload.voteType;
+                    const isUpvoted = duplicateAnswer.upVote.includes(userId)
+                    const isDownVoted = duplicateAnswer.downVote.includes(userId)
+                    if (voteType === 'upVote') {
+                        if (!isUpvoted) {
+                            duplicateAnswer.upVote.push(userId)
+                            duplicateAnswer.author.reputation += 6;
+                        }
+                        if (isUpvoted) {
+                            duplicateAnswer.upVote = duplicateAnswer.upVote.filter(id => id !== userId)
+                            duplicateAnswer.author.reputation -= 6;
+                        }
+                        if (isDownVoted) {
+                            duplicateAnswer.downVote = duplicateAnswer.downVote.filter(id => id !== userId)
+                            duplicateAnswer.author.reputation += 2;
+                        }
+                    } else if (voteType === 'downVote') {
+                        if (!isDownVoted) {
+                            duplicateAnswer.downVote.push(userId)
+                            duplicateAnswer.author.reputation -= 2;
+                        }
+                        if (isDownVoted) {
+                            duplicateAnswer.downVote = duplicateAnswer.downVote.filter(id => id !== userId)
+                            duplicateAnswer.author.reputation += 2;
+                        }
+                        if (isUpvoted) {
+                            duplicateAnswer.upVote = duplicateAnswer.upVote.filter(id => id !== userId)
+                            duplicateAnswer.author.reputation -= 6;
+                        }
+                    }
+                    state.answers=state.answers.map(answer=>{
+                        if (answer._id===answerId) {
+                            answer=duplicateAnswer
+                        }
+                        return answer
+                    })
+                }
+            }
+        }
     },
     extraReducers: (builder) => {
         // *************************** POST ANSWER *************************************
@@ -97,5 +142,6 @@ const answersSlice = createSlice({
         })
     }
 })
+export const {voteAnswer} =answersSlice.actions
 
 export default answersSlice.reducer

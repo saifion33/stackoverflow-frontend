@@ -61,7 +61,7 @@ interface IAuthor {
     _id: string,
     displayName: string,
     reputation: number,
-    imageUrl: string|null
+    imageUrl: string | null
 }
 
 // Question interface
@@ -74,13 +74,17 @@ export interface IQuestion extends IAskQuestion {
     author: IAuthor
 }
 
-export interface IVoteData{
+export interface IVoteData {
     id: string,
-    userId:string,
-    voteType: 'upVote'|'downVote'
+    userId: string,
+    voteType: 'upVote' | 'downVote'
+}
+export interface IVoteAnswerData extends IVoteData {
+    answerAuthorId: string,
+    questionId: string
 }
 
-export interface IpostAnswer{
+export interface IpostAnswer {
     questionId: string
     answerBody: string
 }
@@ -96,7 +100,7 @@ export interface IAnswer {
     isAccepted: boolean
 }
 
-export interface IDeleteAnswer{
+export interface IDeleteAnswer {
     answerId: string,
     questionId: string
 }
@@ -113,10 +117,31 @@ export interface IJwtPayload {
     exp: number,
 }
 
-export interface IAcceptAnswer{
+export interface IAcceptAnswer {
     questionId: string,
     answerId: string,
     questionAuthorId: string,
     answerAuthorId: string,
 }
 
+export interface IforgetPassword {
+    email: string,
+    deviceInfo: {
+        ip: string,
+        location: string
+    }
+}
+export interface IResetPassword{
+    newPassword: string,
+    token: string
+}
+export interface IipInfo {
+    city: string,
+    country: string,
+    ip: string,
+    loc: string,
+    org: string,
+    postal: string,
+    region: string,
+    timezone: string,
+}
