@@ -1,3 +1,4 @@
+import { openAskNotificationModal } from '../../redux/slice/notificationSlice'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { logOutAuto, logout } from '../../redux/slice/authSlice'
@@ -37,6 +38,9 @@ const SignupForm = () => {
                 const token = res.payload.data.token
                 token && handleAutoLogout(token)
                 navigate('/')
+                setTimeout(() => {
+                    dispatch(openAskNotificationModal());
+                }, 2500);
             }else if (signup.rejected.match(res)) {
                 const alertMessage = res.payload?.message
                 if (alertMessage) {

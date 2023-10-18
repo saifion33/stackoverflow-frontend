@@ -4,6 +4,9 @@ import { showAlertWithTimeout } from "../redux/slice/alertSlice";
 import jwtDecode from "jwt-decode";
 import store from "../store";
 import { logout } from "../redux/slice/authSlice";
+import { setNotificationTokenApi } from "../Api";
+import { getToken } from "firebase/messaging";
+import { messaging } from "../firebase/firebase";
 export const usersList: IUser[] = [
     { _id: '1', displayName: 'saifi33', location: 'delhi', reputation: 234, tags: 'javascript,react,html', imageUrl: 'https://randomuser.me/api/portraits/med/men/73.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'full stack develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
     { _id: '2', displayName: 'viscarte', location: '127.0.0.1', reputation: 596, tags: 'c++,php,go', imageUrl: 'https://randomuser.me/api/portraits/med/men/6.jpg', joinedOn: new Date(), answerCount: 0, questionCount: 0, about: 'MERN develper', badges: [{ name: 'Bronze', count: 1, badgesList: ['student'] }, { name: 'Silver', count: 0, badgesList: [] }, { name: 'Gold', count: 0, badgesList: [] }] },
@@ -127,4 +130,20 @@ export const detectBrowser = () => {
         return 'Brave';
     }
     return browser
+}
+export const setNotificationTokenFunction=(token:string)=>{
+    setNotificationTokenApi({token}).then(()=>{
+        store.dispatch(showAlertWithTimeout({message:'Subscribed to Notification',type:'success'}))
+    }).catch((error)=>{
+        console.log(error)
+        store.dispatch(showAlertWithTimeout({message:'Something went wrong.',type:'error'}))
+    })
+}
+
+export const getNotificationToken = (registration: ServiceWorkerRegistration) => {
+    getToken(messaging, { serviceWorkerRegistration: registration })
+        .then(token=>{
+            setNotificationTokenFunction(token)
+        })
+        .catch(error => console.log(error))
 }

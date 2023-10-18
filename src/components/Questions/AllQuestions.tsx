@@ -28,7 +28,7 @@ const AllQuestions = () => {
         <>
             <div className="flex justify-between p-3">
                 <h1 className="text-2xl">All Questions</h1>
-                <button onClick={() => navigate('./ask')} className="bg-blue-500 text-stone-50 py-1 px-2 rounded">Ask Question</button>
+                <button onClick={() => navigate('/questions/ask')} className="bg-blue-500 text-stone-50 py-1 px-2 rounded">Ask Question</button>
             </div>
             <div className="">
                 {

@@ -17,11 +17,11 @@ const QuestionCard = ({question}:Iprops) => {
             <p>{noOfAnswers} answer</p>
         </div>
         <div className="space-y-2">
-            <h2 onClick={()=>navigate(`./${question._id}`)} className="text-blue-500 cursor-pointer">{title}</h2>
+            <h2 onClick={()=>navigate(`/questions/${question._id}`)} className="text-blue-500 cursor-pointer">{title}</h2>
             <p className="text-xs">{description}</p>
             <div className="flex flex-wrap gap-1 text-xs">
                 {
-                    tags.split(',').map(tag=><span className="border-[1px] border-blue-500 bg-blue-50 rounded py-[2px] px-2 " key={tag} >{tag}</span>)
+                    tags.split(',').map(tag=> <span className="border-[1px] border-blue-500 bg-blue-50 rounded py-[2px] px-2 " key={tag} >{tag}</span>)
                 }
             </div>
         </div>

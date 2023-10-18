@@ -145,3 +145,7 @@ export interface IipInfo {
     region: string,
     timezone: string,
 }
+
+export interface ISetNotificationToken{
+    token: string
+}

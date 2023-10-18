@@ -4,13 +4,16 @@ import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './redux/slice/authSlice'
 import questionsReducer from './redux/slice/questionsSlice'
 import answersReducer from './redux/slice/answersSlice'
+import notificationsReducer from './redux/slice/notificationSlice'
+
 const store = configureStore({
     reducer: {
        auth:authReducer,
        alert:alertReducer,
        users:usersReducer,
        questions:questionsReducer,
-       answers:answersReducer
+       answers:answersReducer,
+       notifications:notificationsReducer
     },
 })
 

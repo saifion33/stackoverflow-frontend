@@ -1,3 +1,4 @@
+import { openAskNotificationModal } from '../../redux/slice/notificationSlice'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { logOutAuto, logout } from '../../redux/slice/authSlice'
@@ -14,7 +15,6 @@ import * as yup from 'yup'
 const LoginForm = () => {
 
     const { loading } = useAppSelector(state => state.auth)
-
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const initialValues = {
@@ -28,6 +28,9 @@ const LoginForm = () => {
                     const token = res.payload.data.token
                     token && handleAutoLogout(token)
                     navigate('/')
+                    setTimeout(() => {
+                        dispatch(openAskNotificationModal());
+                    }, 2000);
                 }
                 else if (login.rejected.match(res)) {
                     const alertMessage = res.payload?.message
@@ -73,7 +76,7 @@ const LoginForm = () => {
                         <div className='my-3'>
                             <div className='flex justify-between items-center'>
                                 <label htmlFor="password">Password</label>
-                                <p onClick={()=>navigate('/users/account-recovery')} role='link' className='text-blue-600 text-xs cursor-pointer'>forgot password?</p>
+                                <p onClick={() => navigate('/users/account-recovery')} role='link' className='text-blue-600 text-xs cursor-pointer'>forgot password?</p>
                             </div>
                             <Field type="password" name="password" className="border-[1px] rounded p-1 w-full focus:outline-4 focus:outline outline-blue-100 " />
                             <ErrorMessage name='password' className='text-red-600 text-xs' component={'div'} />

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, IResetPassword, ISignupForm, IVoteAnswerData, IVoteData, IforgetPassword, IpostAnswer} from '../Types'
+import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, IResetPassword, ISetNotificationToken, ISignupForm, IVoteAnswerData, IVoteData, IforgetPassword, IpostAnswer} from '../Types'
 
 
 const api=axios.create({
@@ -38,3 +38,5 @@ export const getAllAnswersApi=(questionId:string)=>api.get(`/answers/all/${quest
 export const deleteAnswerApi=(deleteData:IDeleteAnswer)=>api.delete('/answers/delete',{data:deleteData})
 export const acceptAnswerApi=(answerData:IAcceptAnswer)=>api.patch('/answers/accept',answerData)
 export const voteAnswerApi=(voteData:IVoteAnswerData)=>api.patch('/answers/vote',voteData)
+
+export const setNotificationTokenApi=(notificationData:ISetNotificationToken)=>api.patch('/notifications/setNotificationToken',notificationData)
