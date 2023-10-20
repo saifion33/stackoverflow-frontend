@@ -26,6 +26,7 @@ import Users from "./pages/Users"
 import { useEffect } from "react"
 import Home from "./pages/Home"
 import Tags from "./pages/Tags"
+import Video from "./pages/Video"
 
 const App = () => {
   const isRequestNotificationModelOpen = useAppSelector(state => state.notifications.askPermission)
@@ -94,6 +95,9 @@ const App = () => {
             <Route path="/questions/:id" element={<Question />} />
             <Route path="/questions/ask" element={<AskQuestion />} />
           </Route>
+          <Route path="/video" element={ <Video/>} />
+           
+          
         </Routes>
       </Router>
     </main>
