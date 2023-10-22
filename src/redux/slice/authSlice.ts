@@ -2,6 +2,9 @@ import { login, signup, updateUserProfile } from '../actions/auth';
 import { createSlice } from '@reduxjs/toolkit'
 import { AppDispatch } from '../../store';
 import { IUser } from '../../Types';
+import { signOut } from 'firebase/auth';
+import { auth, database } from '../../firebase/firebase';
+import { ref, serverTimestamp, set } from 'firebase/database';
 
 
 interface Istate {
@@ -28,7 +31,12 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
+            const uid=state.user?.profile?.fuid
             state.user = null;
+            signOut(auth).then(()=>{
+                const userRef=ref(database,`/status/${uid}`)
+                set(userRef,{isOnline:false,last_changed:serverTimestamp()});
+            })
             localStorage.removeItem('user');
         },
     },

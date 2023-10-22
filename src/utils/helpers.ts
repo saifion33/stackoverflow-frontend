@@ -1,4 +1,4 @@
-import { IJwtPayload, ITags } from "../Types";
+import { ClearUserPresence, IJwtPayload, ITags } from "../Types";
 import AvatarEditor from 'react-avatar-editor'
 import { showAlertWithTimeout } from "../redux/slice/alertSlice";
 import jwtDecode from "jwt-decode";
@@ -6,7 +6,9 @@ import store from "../store";
 import { logout } from "../redux/slice/authSlice";
 import { setNotificationTokenApi } from "../Api";
 import { getToken } from "firebase/messaging";
-import { messaging } from "../firebase/firebase";
+import { auth, database, messaging } from "../firebase/firebase";
+import { DatabaseReference, off, onDisconnect, onValue, ref, serverTimestamp, set } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
 
 export const tags: ITags[] = [
     { id: '1', name: 'javascript', description: 'For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant to your question: e.g., [node.js], [jQuery], [JSON], [ReactJS], [angular], [ember.js], [vue.js], [typescript], [svelte], etc. ', questionAsked: 0 },
@@ -126,19 +128,61 @@ export const detectBrowser = () => {
     }
     return browser
 }
-export const setNotificationTokenFunction=(token:string)=>{
-    setNotificationTokenApi({token}).then(()=>{
-        store.dispatch(showAlertWithTimeout({message:'Subscribed to Notification',type:'success'}))
-    }).catch((error)=>{
+export const setNotificationTokenFunction = (token: string) => {
+    setNotificationTokenApi({ token }).then(() => {
+        store.dispatch(showAlertWithTimeout({ message: 'Subscribed to Notification', type: 'success' }))
+    }).catch((error) => {
         console.log(error)
-        store.dispatch(showAlertWithTimeout({message:'Something went wrong.',type:'error'}))
+        store.dispatch(showAlertWithTimeout({ message: 'Something went wrong.', type: 'error' }))
     })
 }
 
 export const getNotificationToken = (registration: ServiceWorkerRegistration) => {
     getToken(messaging, { serviceWorkerRegistration: registration })
-        .then(token=>{
+        .then(token => {
             setNotificationTokenFunction(token)
         })
         .catch(error => console.log(error))
+}
+
+export const userPresence:ClearUserPresence = () => {
+    let userDataRef: DatabaseReference
+    const authUnsub = onAuthStateChanged(auth, (User) => {
+        if (User) {
+            userDataRef = ref(database, `/status/${User?.uid}`)
+            const isOfflineForDatabase = {
+                isOnline: false,
+                last_changed: serverTimestamp(),
+            };
+
+            const isOnlineForDatabase = {
+                isOnline: true,
+                last_changed: serverTimestamp(),
+            };
+            const dbRef = ref(database, '.info/connected')
+            onValue(dbRef, (snap) => {
+                if (snap.val() == false) {
+                    return;
+                }
+                onDisconnect(userDataRef).set(isOfflineForDatabase).then(() => {
+                    set(userDataRef, isOnlineForDatabase)
+                })
+            })
+        } else {
+            if (userDataRef) {
+                off(userDataRef)
+            }
+            off(ref(database, '.info/connected'))
+        }
+
+    })
+    const clearFunction: () => void = () => {
+        authUnsub();
+        if (userDataRef) {
+            off(userDataRef)
+        }
+        off(ref(database, '.info/connected'))
+    }
+
+    return clearFunction
 }

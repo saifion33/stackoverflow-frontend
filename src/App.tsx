@@ -27,6 +27,8 @@ import { useEffect } from "react"
 import Home from "./pages/Home"
 import Tags from "./pages/Tags"
 import Video from "./pages/Video"
+import Voip from "./pages/Voip"
+import { userPresence } from "./utils/helpers"
 
 const App = () => {
   const isRequestNotificationModelOpen = useAppSelector(state => state.notifications.askPermission)
@@ -40,13 +42,14 @@ const App = () => {
       const currentTime = Date.now()
       const timeToexpire = tokenTime * 1000 - currentTime
       if (timeToexpire <= 0) {
-        dispatch(logout())
+        dispatch(logout()) 
       }
     }
   }
 
 
   useEffect(() => {
+    const unsubUserPresence=userPresence()
     logOutAfterSessionExipred()
     const unsubscribe = onMessage(messaging, (payload) => {
       toast.info(<div>
@@ -54,7 +57,10 @@ const App = () => {
         <p>{payload.notification?.body}</p>
       </div>)
     })
-    return () => { unsubscribe() }
+    return () => { 
+      unsubscribe() 
+      unsubUserPresence()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -96,6 +102,7 @@ const App = () => {
             <Route path="/questions/ask" element={<AskQuestion />} />
           </Route>
           <Route path="/video" element={ <Video/>} />
+          <Route path="/voip" element={<Voip/>} />
            
           
         </Routes>

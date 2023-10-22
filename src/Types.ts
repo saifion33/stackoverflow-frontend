@@ -10,6 +10,7 @@ export interface ISignupForm extends ILoginForm {
 
 export interface IBasicUserDetails {
     _id: string,
+    fuid:string,
     displayName: string,
     about: string,
     location: string,
@@ -149,3 +150,10 @@ export interface IipInfo {
 export interface ISetNotificationToken{
     token: string
 }
+
+export interface IUserPresence{
+    isOnline: boolean
+    last_changed:Date
+}
+
+export type ClearUserPresence=()=>()=>void

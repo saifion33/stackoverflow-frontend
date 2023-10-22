@@ -2,7 +2,7 @@ import { openAskNotificationModal } from '../../redux/slice/notificationSlice'
 import { showAlertWithTimeout } from '../../redux/slice/alertSlice'
 import { useAppDispatch, useAppSelector } from '../../redux-hooks'
 import { logOutAuto, logout } from '../../redux/slice/authSlice'
-import { checkNetworkAndSession } from '../../utils/helpers'
+import { checkNetworkAndSession} from '../../utils/helpers'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import loadingIcon from '../../assets/loading-icon.svg'
 import { IJwtPayload, ILoginForm } from '../../Types'
@@ -10,6 +10,8 @@ import { login } from '../../redux/actions/auth'
 import { useNavigate } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import * as yup from 'yup'
+import {signInWithEmailAndPassword} from 'firebase/auth'
+import { auth } from '../../firebase/firebase'
 
 
 const LoginForm = () => {
@@ -28,6 +30,8 @@ const LoginForm = () => {
                     const token = res.payload.data.token
                     token && handleAutoLogout(token)
                     navigate('/')
+                    signInWithEmailAndPassword(auth,res.meta.arg.email,res.meta.arg.password)
+                    .catch(err=>console.log(err));
                     setTimeout(() => {
                         dispatch(openAskNotificationModal());
                     }, 2000);

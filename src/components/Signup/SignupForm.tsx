@@ -10,6 +10,8 @@ import { signup } from '../../redux/actions/auth'
 import { useNavigate } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import * as yup from 'yup'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../../firebase/firebase'
 
 const SignupForm = () => {
     const dispatch = useAppDispatch()
@@ -38,6 +40,7 @@ const SignupForm = () => {
                 const token = res.payload.data.token
                 token && handleAutoLogout(token)
                 navigate('/')
+                signInWithEmailAndPassword(auth,res.meta.arg.email,res.meta.arg.password).catch(err=>console.log(err))
                 setTimeout(() => {
                     dispatch(openAskNotificationModal());
                 }, 2500);

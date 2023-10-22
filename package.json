@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@types/react-avatar-editor": "^13.0.0",
+    "agora-rtc-sdk-ng": "^4.19.2",
     "axios": "^1.4.0",
     "copy-to-clipboard": "^3.3.3",
     "formik": "^2.4.3",
