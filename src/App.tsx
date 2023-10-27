@@ -9,6 +9,7 @@ import UserProfile from "./components/users/UserProfile"
 import PageContainer from "./components/PageContainer"
 import { ToastContainer, toast } from "react-toastify"
 import Question from "./components/Questions/Question"
+import IncomingCall from "./components/IncomingCall"
 import UsersList from "./components/users/UsersList"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from "./pages/ResetPassword"
@@ -16,6 +17,7 @@ import { logout } from "./redux/slice/authSlice"
 import Navbar from "./components/Navbar/Navbar"
 import { messaging } from "./firebase/firebase"
 import { onMessage } from "firebase/messaging"
+import { userPresence } from "./utils/helpers"
 import 'react-toastify/dist/ReactToastify.css'
 import Questions from "./pages/Questions"
 import { IJwtPayload } from "./Types"
@@ -27,12 +29,14 @@ import { useEffect } from "react"
 import Home from "./pages/Home"
 import Tags from "./pages/Tags"
 import Video from "./pages/Video"
-import Voip from "./pages/Voip"
-import { userPresence } from "./utils/helpers"
+import VoipWrapper from "./pages/Voip/VoipWrapper"
+import Call from "./pages/Voip/Call"
+import LoginHistory from "./pages/LoginHistory"
 
 const App = () => {
   const isRequestNotificationModelOpen = useAppSelector(state => state.notifications.askPermission)
   const token = useAppSelector(state => state.auth.user?.token)
+  const user = useAppSelector(state => state.auth.user?.profile)
   const dispatch = useAppDispatch()
 
 
@@ -42,14 +46,14 @@ const App = () => {
       const currentTime = Date.now()
       const timeToexpire = tokenTime * 1000 - currentTime
       if (timeToexpire <= 0) {
-        dispatch(logout()) 
+        dispatch(logout())
       }
     }
   }
 
 
   useEffect(() => {
-    const unsubUserPresence=userPresence()
+    const unsubUserPresence = userPresence()
     logOutAfterSessionExipred()
     const unsubscribe = onMessage(messaging, (payload) => {
       toast.info(<div>
@@ -57,8 +61,8 @@ const App = () => {
         <p>{payload.notification?.body}</p>
       </div>)
     })
-    return () => { 
-      unsubscribe() 
+    return () => {
+      unsubscribe()
       unsubUserPresence()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,12 +87,16 @@ const App = () => {
       />
       <Router>
         <Navbar />
+        {
+          user && <IncomingCall fuid={user.fuid} />
+        }
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<PageContainer><Users /></PageContainer>} >
             <Route path="/users" element={<UsersList />} />
             <Route path="/users/:id" element={<UserProfile />} />
             <Route path="/users/edit/:id" element={<EditUserProfile />} />
+            <Route path="/users/login-history/:id"  element={<LoginHistory/>}/>
             <Route path="/users/reputation-and-badge" element={<ReputationAndBadge />} />
           </Route>
           <Route path="/users/signup" element={<Signup />} />
@@ -101,9 +109,9 @@ const App = () => {
             <Route path="/questions/:id" element={<Question />} />
             <Route path="/questions/ask" element={<AskQuestion />} />
           </Route>
-          <Route path="/video" element={ <Video/>} />
-          <Route path="/voip" element={<Voip/>} />
-           
+          <Route path="/video" element={<Video />} />
+          <Route path="/voip" element={<VoipWrapper />} />
+          <Route path="/call/:callId/:callType/:callToken/:reciverFuid?/:reciverName?" element={<Call/>} />
           
         </Routes>
       </Router>

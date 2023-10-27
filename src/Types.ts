@@ -1,16 +1,35 @@
+export interface IDeviceInfo{
+    ip: string,
+    browser:string
+    deviceType: string
+    os: string
+    location: string
+    loggedInAt?:Date
+}
+
 // login form interface
 export interface ILoginForm {
     email: string,
-    password: string
+    password: string,
 }
+
+// use when submit login data to server
+export interface ILoginData extends ILoginForm{
+    deviceInfo: IDeviceInfo
+}
+
 // signup form interface
 export interface ISignupForm extends ILoginForm {
     displayName: string,
 }
 
+// use when submit signup  data to server
+export interface ISignupData extends ILoginData {
+    displayName: string,
+}
 export interface IBasicUserDetails {
     _id: string,
-    fuid:string,
+    fuid: string,
     displayName: string,
     about: string,
     location: string,
@@ -132,7 +151,7 @@ export interface IforgetPassword {
         location: string
     }
 }
-export interface IResetPassword{
+export interface IResetPassword {
     newPassword: string,
     token: string
 }
@@ -147,13 +166,35 @@ export interface IipInfo {
     timezone: string,
 }
 
-export interface ISetNotificationToken{
+export interface ISetNotificationToken {
     token: string
 }
 
-export interface IUserPresence{
+export interface IUserPresence {
     isOnline: boolean
-    last_changed:Date
+    last_changed: Date
 }
 
-export type ClearUserPresence=()=>()=>void
+export type ClearUserPresence = () => () => void
+
+export interface ImakeCall{
+    callerName: string
+    to:string
+    callType:'audio'|'video'
+}
+
+
+export interface ICallData{
+    callToken: string
+    callId: string
+    callerId: string
+    callerName: string,
+    callType: 'video' |'audio'
+}
+
+
+export interface IReciver{
+    fuid: string
+    name: string
+}
+

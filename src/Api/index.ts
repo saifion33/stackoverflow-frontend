@@ -1,9 +1,9 @@
 import axios from 'axios'
-import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginForm, IResetPassword, ISetNotificationToken, ISignupForm, IVoteAnswerData, IVoteData, IforgetPassword, IpostAnswer} from '../Types'
+import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginData,  IResetPassword, ISetNotificationToken, ISignupData,  IVoteAnswerData, IVoteData, IforgetPassword, ImakeCall, IpostAnswer} from '../Types'
 
 
 const api=axios.create({
-    baseURL:'http://localhost:5000',
+    baseURL:'http://192.168.43.224:5000',
 })
 
 api.interceptors.request.use((config)=>{
@@ -14,14 +14,22 @@ api.interceptors.request.use((config)=>{
         if (token) {
             config.headers.Authorization=`Bearer ${token}`
         }
+    }else if (config.url?.includes('/auth/loginHistory')) {
+        const storedToken=localStorage.getItem('user')
+        const token=storedToken?JSON.parse(storedToken).token:null
+        if (token) {
+            config.headers.Authorization=`Bearer ${token}`
+        }
     }
    return config
 })
 
-export const signUpUser=(data:ISignupForm)=>api.post('/auth/signup', data)
-export const logInUser=(data:ILoginForm)=>api.post('/auth/login', data)
+export const signUpUser=(data:ISignupData)=>api.post('/auth/signup', data)
+export const logInUser=(data:ILoginData)=>api.post('/auth/login', data)
 export const forgetPasswordApi=(data:IforgetPassword)=>api.patch('/auth/forgetPassword',data)
 export const resetPasswordApi=(data:IResetPassword)=>api.patch('/auth/resetPassword',data)
+export const getLoginHistoryApi=()=>api.get('/auth/loginHistory')
+
 
 export const getAllUsers=()=>api.get('/users/all')
 export const getUserById=(userId:string)=>api.get(`/users/${userId}`)
@@ -40,3 +48,5 @@ export const acceptAnswerApi=(answerData:IAcceptAnswer)=>api.patch('/answers/acc
 export const voteAnswerApi=(voteData:IVoteAnswerData)=>api.patch('/answers/vote',voteData)
 
 export const setNotificationTokenApi=(notificationData:ISetNotificationToken)=>api.patch('/notifications/setNotificationToken',notificationData)
+
+export const makeCallApi=(data:ImakeCall)=>api.post('/calls/makeCall',data)

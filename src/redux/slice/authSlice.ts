@@ -32,11 +32,9 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             const uid=state.user?.profile?.fuid
+            const userRef=ref(database,`/status/${uid}`)
+            set(userRef,{isOnline:false,last_changed:serverTimestamp()}).then(()=>signOut(auth))
             state.user = null;
-            signOut(auth).then(()=>{
-                const userRef=ref(database,`/status/${uid}`)
-                set(userRef,{isOnline:false,last_changed:serverTimestamp()});
-            })
             localStorage.removeItem('user');
         },
     },
