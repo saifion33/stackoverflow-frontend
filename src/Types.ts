@@ -4,7 +4,11 @@ export interface IDeviceInfo{
     deviceType: string
     os: string
     location: string
-    loggedInAt?:Date
+}
+
+export interface ILoginHistory extends IDeviceInfo{
+     loggedInAt:Date
+     _id:string
 }
 
 // login form interface
