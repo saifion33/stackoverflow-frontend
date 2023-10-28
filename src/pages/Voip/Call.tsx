@@ -1,12 +1,17 @@
+import AgoraRTC, { ICameraVideoTrack, IMicrophoneAudioTrack, IAgoraRTCClient, IAgoraRTCRemoteUser, IRemoteAudioTrack, } from "agora-rtc-sdk-ng";
+import { BsArrowRepeat, BsFillMicFill, BsFillMicMuteFill, } from 'react-icons/bs'
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { child, get, off, onValue, ref, set } from 'firebase/database';
+import { IoCall, IoVideocam, IoVideocamOff } from 'react-icons/io5';
 import PageContainer from "../../components/PageContainer"
-import AgoraRTC, { ICameraVideoTrack, IMicrophoneAudioTrack, IAgoraRTCClient, IAgoraRTCRemoteUser, } from "agora-rtc-sdk-ng";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../redux-hooks';
-import { child, get, off, onValue, ref, set } from 'firebase/database';
 import { database } from '../../firebase/firebase';
-import { IoCall, IoVideocam, IoVideocamOff } from 'react-icons/io5';
-import { BsArrowRepeat, BsFillMicFill, BsFillMicMuteFill, } from 'react-icons/bs';
+import loadingIcon from '../../assets/loading-icon.svg'
+import { toast } from 'react-toastify'
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+
+
 const client: IAgoraRTCClient = AgoraRTC.createClient({
     mode: "rtc",
     codec: "vp8",
@@ -18,6 +23,7 @@ const Call = () => {
     const user = useAppSelector(state => state.auth.user?.profile)
     const navigate = useNavigate()
     const { callToken, callId, callType: type, reciverFuid, reciverName } = useParams();
+    const callRequestRef = ref(database, `/calls/${reciverFuid}/callRequest`)
     const onGoingCallRef = ref(database, `/calls/${reciverFuid ? reciverFuid : user?.fuid}/onGoingCall`)
     const [isRemoteUserJoined, setIsRemoteUserJoined] = useState(false);
     const [callType, setcallType] = useState<string>(type || 'audio')
@@ -25,8 +31,18 @@ const Call = () => {
     const [callerName, setCallerName] = useState<null | string>(null)
     const [isAudioOn, setIsAudioOn] = useState(false);
     const [isVideoOn, setIsVideoOn] = useState(false);
+    const [isSwitchingCall, setIsSwitchingCall] = useState(false);
+    const [remoteAudioTracks, setRemoteAudioTracks] = useState<null | IRemoteAudioTrack>(null);
+    const [isSpeakerOn, setIsSpeakerOn] = useState(true);
 
     const hangCall = () => {
+        if (reciverFuid) {
+            get(callRequestRef).then(snap => {
+                if (snap.exists()) {
+                    set(callRequestRef, {}).catch(err => console.error(err));
+                }
+            })
+        }
         set(child(onGoingCallRef, '/callState'), 'hang').then(() => {
 
         })
@@ -51,14 +67,12 @@ const Call = () => {
         if (flag) {
             audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
         }
-        // audioTrack.play();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const [isJoined, setIsJoined] = useState(false);
     const channel = useRef("");
     const appid = useRef("ee1bedf4fa6f43b2adac0e2d9c4a32fd");
-    // you can apply token follow the guide https://www.agora.io/en/blog/how-to-get-started-with-agora/
     const token = useRef("");
 
     const joinChannel = useCallback(async () => {
@@ -71,6 +85,10 @@ const Call = () => {
         }
 
         client.on("user-published", onUserPublish);
+        client.on("user-joined", (user) => {
+            const remoteAudioTracks= user.audioTrack || null;
+            setRemoteAudioTracks(remoteAudioTracks);
+        })
 
         await client.join(
             appid.current,
@@ -97,9 +115,11 @@ const Call = () => {
         }
         if (mediaType === "audio") {
             const remoteTrack = await client.subscribe(user, mediaType);
+            setRemoteAudioTracks(remoteTrack);
             remoteTrack.play();
         }
         setIsRemoteUserJoined(true);
+
     };
 
 
@@ -166,30 +186,46 @@ const Call = () => {
                 }).catch(err => console.error(err));
         }
     }
+    const handleOnOffSpeaker = () => {
+        if (remoteAudioTracks?.isPlaying) {
+            remoteAudioTracks.stop();
+            setIsSpeakerOn(false);
+        }else{
+            remoteAudioTracks?.play();
+            setIsSpeakerOn(true);
+        }
+    }
     const handleSwitchCall = async () => {
+        setIsSwitchingCall(true);
         if (callType == 'video') {
             set(child(onGoingCallRef, '/callType'), 'audio').then(async () => {
                 const newUrl = window.location.pathname.replace('/video', '/audio');
-                navigate(newUrl, { replace: true });
                 setcallType('audio');
                 await turnOnCamera(false);
+                await client.unpublish(videoTrack);
+                setIsSwitchingCall(false);
+                navigate(newUrl, { replace: true });
             }).catch(err => {
                 console.log(err);
+                setIsSwitchingCall(false);
             })
-           
+
         }
         else if (callType == 'audio') {
             set(child(onGoingCallRef, '/callType'), 'video').then(async () => {
                 const newUrl = window.location.pathname.replace('/audio', '/video');
-                navigate(newUrl, { replace: true });
                 setcallType('video');
                 await turnOnCamera(true);
-                await client.publish(videoTrack)
+                await client.publish(videoTrack);
+                setIsSwitchingCall(false);
+                navigate(newUrl, { replace: true });
             }).catch(err => {
                 console.log(err);
+                setIsSwitchingCall(false);
             })
         }
     }
+
 
     useEffect(() => {
         if (callToken && callId && callType) {
@@ -197,7 +233,37 @@ const Call = () => {
             token.current = callToken;
             joinCall(callType)
 
+            if (reciverFuid) {
+                onValue(callRequestRef, (snap) => {
+                    if (snap.exists()) {
+                        if (snap.val().callState === 'default') {
+                            toast.info('calling...', { autoClose: 1000 })
+                            setTimeout(() => {
+                                if (snap.val() === 'default') {
+                                    toast.warning('User not Answering...', { autoClose: 1000 })
+                                    navigate('/voip');
+                                }
+                            }, 1000 * 30)
+                        } else if (snap.val().callState === 'accepted') {
+                            toast.success('call Accepted', { autoClose: 1500 })
+                        } else if (snap.val().callState === 'declined') {
+                            set(onGoingCallRef, null);
+                            set(statusRef, 'idle');
+                            leaveChannel().then(() => {
+                                turnOnMicrophone(false).catch(err => console.error(err));
+                                turnOnCamera(false).then(async () => {
+                                    setTimeout(() => {
+                                        navigate('/voip')
+                                    }, 1500);
+                                }).catch(err => console.error(err));
+                            })
+                        }
+                    }
+                })
+            }
+
             onValue(onGoingCallRef, async (snap) => {
+                console.log(snap.val());
                 if (snap.exists()) {
                     if (snap.val().callState === 'hang') {
                         set(onGoingCallRef, null);
@@ -211,7 +277,7 @@ const Call = () => {
                         })
                         return
                     }
-                    
+
                     if (snap.val().callType === 'video') {
                         await turnOnCamera(true);
                         await client.publish(videoTrack);
@@ -228,17 +294,20 @@ const Call = () => {
                         navigate(newUrl, { replace: true });
                     }
                     setcallType(snap.val().callType)
-
                 }
             })
         }
         return () => {
             off(child(onGoingCallRef, '/callType'))
-            off(ref(database, `/calls/${reciverFuid}/onGoingCall`))
+            off(onGoingCallRef)
+            off(callRequestRef)
         }
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
 
 
     return (
@@ -250,9 +319,9 @@ const Call = () => {
                         <div className='relative w-full max-w-xl h-fit'>
                             <video className={`border-2 border-slate-900 max-w-full ${callType == 'video' ? 'block' : 'hidden'} ${isRemoteUserJoined ? 'w-20' : 'w-full'} absolute right-2 top-2`} id="camera-video" ></video>
                             <video className={`w-full max-w-full ${callType == 'video' ? 'block' : 'hidden'} `} id="remote-video" ></video>
-                            <div className=' bg-slate-950'>
-                                {(callType == 'audio' && callerName) && <div className='text-stone-50 w-full h-[400px] bg-blue-100 text-5xl flex flex-col gap-4 justify-center items-center'>
-                                    <h1 className='p-2 bg-slate-900 rounded-full w-16 h-16 text-center'>{callerName.slice(0, 1).toUpperCase()}</h1>
+                            <div className=' bg-slate-950 relative'>
+                                {(callType == 'audio' && (callerName !== user?.displayName)) && callerName && <div className='text-stone-50 w-full h-[400px] bg-blue-100 text-5xl flex flex-col gap-4 justify-center items-center'>
+                                    <h1 className='p-2 bg-slate-900 rounded-full w-16 h-16 text-center'>{callerName ? callerName.slice(0, 1).toUpperCase() : null}</h1>
                                     <div className='flex gap-2 items-center'>
                                         <span className='w-2 h-2 block bg-slate-900 rounded-full animate-bounce'></span>
                                         <span className='w-2 h-2 block bg-slate-900 rounded-full animate-bounce'></span>
@@ -273,12 +342,23 @@ const Call = () => {
                                         <span className='w-2 h-2 block bg-slate-900 rounded-full animate-bounce'></span>
                                     </div>
                                 </div>}
+                                {
+                                    isSwitchingCall && <div className="absolute top-0 left-0 right-0 bottom-0 bg-stone-50 flex justify-center items-center flex-col">
+                                        <img className="w-20" src={loadingIcon} alt="loading icon" />
+                                        <p>Switching call...</p>
+                                    </div>
+                                }
                             </div>
 
                             <div className='absolute bottom-0 w-full flex items-center gap-3 p-4 bg-slate-950 bg-opacity-50 '>
                                 {
-                                    isJoined && <div onClick={handleSwitchCall} className='bg-blue-500 rounded-md p-1 text-3xl w-fit '>
+                                    (isJoined && !isSwitchingCall) && <div onClick={handleSwitchCall} className='bg-blue-500 rounded-md p-1 text-3xl w-fit '>
                                         <BsArrowRepeat />
+                                    </div>
+                                }
+                                {
+                                    (isJoined && !isSwitchingCall) && <div onClick={handleOnOffSpeaker} className='bg-blue-500 rounded-md p-1 text-3xl w-fit '>
+                                        {isSpeakerOn ? <HiSpeakerWave /> : <HiSpeakerXMark />}
                                     </div>
                                 }
 

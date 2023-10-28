@@ -26,12 +26,12 @@ const UserProfileCard = ({ user, makeAudioCall, makeVideoCall }: IProps) => {
                 {!user.imageUrl && <img className="max-w-full " src={userIcon} alt={user.displayName} />}
             </div>
             <div className="text-xs">
-                <h3 onClick={() => navigate(`./${user._id}`)} role="button" className="text-blue-600 text-sm">{user.displayName}</h3>
+                <h3 onClick={() => navigate(`/users/${user._id}`)} role="button" className="text-blue-600 text-sm">{user.displayName}</h3>
                 <p className="">{user.location}</p>
                 <p className="text-gray-500 font-medium">{user.reputation}</p>
                 <p className="text-blue-600">{user.tags}</p>
             </div>
-            {(isOnline.isOnline && !admin) && <div className='space-y-3'>
+            {(isOnline.isOnline && !admin) && <div className='space-y-3 ml-auto'>
                 {
                     makeAudioCall && <div onClick={() =>makeAudioCall({fuid:user.fuid,name:user.displayName})} className={` p-1  rounded-full bg-green-500 cursor-pointer`}><IoCall /></div>
                 }
