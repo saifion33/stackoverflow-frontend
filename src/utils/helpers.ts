@@ -10,6 +10,7 @@ import { auth, database, messaging } from "../firebase/firebase";
 import { DatabaseReference, off, onDisconnect, onValue, ref, serverTimestamp, set } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
+import {toast} from 'react-toastify'
 
 export const tags: ITags[] = [
     { id: '1', name: 'javascript', description: 'For questions about programming in ECMAScript (JavaScript/JS) and its different dialects/implementations (except for ActionScript). Note that JavaScript is NOT Java. Include all tags that are relevant to your question: e.g., [node.js], [jQuery], [JSON], [ReactJS], [angular], [ember.js], [vue.js], [typescript], [svelte], etc. ', questionAsked: 0 },
@@ -138,12 +139,18 @@ export const setNotificationTokenFunction = (token: string) => {
     })
 }
 
-export const getNotificationToken = (registration: ServiceWorkerRegistration) => {
-    getToken(messaging, { serviceWorkerRegistration: registration })
+export const getNotificationToken = async(registration: ServiceWorkerRegistration) => {
+    const msg=await messaging()
+    if (msg) {
+        getToken(msg, { serviceWorkerRegistration: registration })
         .then(token => {
             setNotificationTokenFunction(token)
         })
         .catch(error => console.log(error))
+    }
+    else{
+        toast.info('Your Device does not support firebase notifications.')
+    }
 }
 
 interface Ipdata {

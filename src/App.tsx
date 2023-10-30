@@ -53,19 +53,20 @@ const App = () => {
     }
   }
 
-
   useEffect(() => {
     const unsubUserPresence = userPresence()
     logOutAfterSessionExipred()
     let unsubscribe: () => void | undefined
-    if (messaging) {
-      unsubscribe = onMessage(messaging, (payload) => {
-        toast.info(<div>
-          <h1>{payload.notification?.title}</h1>
-          <p>{payload.notification?.body}</p>
-        </div>)
-      })
-    }
+    messaging().then(msg => {
+      if (msg) {
+        unsubscribe = onMessage(msg, (payload) => {
+          toast.info(<div>
+            <h1>{payload.notification?.title}</h1>
+            <p>{payload.notification?.body}</p>
+          </div>)
+        })
+      }
+    })
     return () => {
       if (unsubscribe) {
         unsubscribe()
