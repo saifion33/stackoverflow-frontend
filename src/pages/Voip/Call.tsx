@@ -238,13 +238,17 @@ const Call = () => {
                     if (snap.exists()) {
                         if (snap.val().callState === 'default') {
                             toast.info('calling...', { autoClose: 1000 })
-                            setTimeout(() => {
-                                if (snap.val() === 'default') {
-                                    toast.warning('User not Answering...', { autoClose: 1000 })
-                                    navigate('/voip');
+                            setTimeout(async() => {
+                                const onGoingCall=await get(onGoingCallRef).then((snap)=>snap.exists())
+                                if (!onGoingCall) {
+                                    toast.warning('User not Answering.....',{autoClose:1000})
+                                    leaveChannel().then(()=>{
+                                        navigate('/voip')
+                                    })
                                 }
-                            }, 1000 * 30)
+                            }, 1000*30);
                         } else if (snap.val().callState === 'accepted') {
+                            set(statusRef,'busy');
                             toast.success('call Accepted', { autoClose: 1500 })
                         } else if (snap.val().callState === 'declined') {
                             set(onGoingCallRef, null);
@@ -297,10 +301,11 @@ const Call = () => {
                 }
             })
         }
+       
         return () => {
             off(child(onGoingCallRef, '/callType'))
             off(onGoingCallRef)
-            off(callRequestRef)
+            off(callRequestRef);
         }
 
         

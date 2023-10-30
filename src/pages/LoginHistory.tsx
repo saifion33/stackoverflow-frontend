@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom"
 import { ILoginHistory } from "../Types"
 import Loading from "../components/Loading"
 import LoginHistoryCard from "../components/LoginHistory/LoginHistoryCard"
-import { BiArrowBack } from "react-icons/bi"
 import { checkNetworkAndSession } from "../utils/helpers"
+import NoInternet from "../components/NoInternet"
 
 const LoginHistory = () => {
     const user = useAppSelector(state => state.auth.user?.profile)
@@ -46,6 +46,14 @@ const LoginHistory = () => {
             </div>}
             {
                 loading && <Loading />
+            }
+            {
+                (!loading && !loginHistory && !navigator.onLine) && <NoInternet/>
+            }
+            {
+                (!user && !loading) && <div>
+                    Please login s.
+                </div>
             }
         </div>
     )
