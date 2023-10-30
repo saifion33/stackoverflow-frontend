@@ -57,14 +57,19 @@ const App = () => {
   useEffect(() => {
     const unsubUserPresence = userPresence()
     logOutAfterSessionExipred()
-    const unsubscribe = onMessage(messaging, (payload) => {
-      toast.info(<div>
-        <h1>{payload.notification?.title}</h1>
-        <p>{payload.notification?.body}</p>
-      </div>)
-    })
+    let unsubscribe: () => void | undefined
+    if (messaging) {
+      unsubscribe = onMessage(messaging, (payload) => {
+        toast.info(<div>
+          <h1>{payload.notification?.title}</h1>
+          <p>{payload.notification?.body}</p>
+        </div>)
+      })
+    }
     return () => {
-      unsubscribe()
+      if (unsubscribe) {
+        unsubscribe()
+      }
       unsubUserPresence()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

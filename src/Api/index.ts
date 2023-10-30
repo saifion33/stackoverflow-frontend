@@ -3,7 +3,7 @@ import {IAcceptAnswer, IAskQuestion, IDeleteAnswer, ILoginData,  IResetPassword,
 
 
 const api=axios.create({
-    baseURL:'http://192.168.43.224:5000',
+    baseURL:'https://stackoverflow-server-z2ci.onrender.com',
 })
 
 api.interceptors.request.use((config)=>{
