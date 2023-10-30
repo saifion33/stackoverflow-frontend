@@ -1,8 +1,10 @@
 import searchIcon from '../assets/search-illustration.svg'
 import lockIcon from '../assets/lock-illustration.svg'
 import { useAppSelector } from '../redux-hooks'
-import AllQuestions from '../components/Questions/AllQuestions'
+import {lazy,Suspense} from 'react'
+const AllQuestions =lazy(()=>import('../components/Questions/AllQuestions'))
 import PageContainer from '../components/PageContainer'
+import Loading from '../components/Loading'
 const Home = () => {
   const user = useAppSelector(state => state.auth.user?.profile)
   return (
@@ -57,7 +59,7 @@ const Home = () => {
       }
       {
         user && <PageContainer>
-          <AllQuestions/>
+          <Suspense fallback={<Loading/>} ><AllQuestions/></Suspense>
         </PageContainer>
       }
     </div>

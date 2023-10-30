@@ -22,7 +22,7 @@ const Navbar = () => {
     return (
         <nav className='flex sticky top-0 left-0 z-50  justify-center bg-white shadow w-full '>
             <div className='flex relative items-center   gap-1 py-1 px-2 w-full max-w-7xl'>
-                <div role='button' className={`text-2xl text-gray-700 sm:mr-2  ${((showMenuIconPages.includes(location.pathname)) || window.innerWidth <= 640) ? 'block' : 'hidden'}`} onClick={() => setIsMenuOpen(p => !p)} >
+                <div role='button' id='menu-button' className={`text-2xl text-gray-700 sm:mr-2  ${((showMenuIconPages.includes(location.pathname)) || window.innerWidth <= 640) ? 'block' : 'hidden'}`} onClick={() => setIsMenuOpen(p => !p)} >
                     {isMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
                 </div>
                 <div className='' >
