@@ -10,7 +10,7 @@ import NoInternet from '../NoInternet'
 import BadgeCard from "./BadgeCard"
 import { IUser } from '../../Types'
 import Loading from '../Loading'
-import {useCallback} from 'react'
+import { useCallback } from 'react'
 
 const UserProfile = () => {
     const [user, setUser] = useState<IUser | null>(null)
@@ -25,7 +25,7 @@ const UserProfile = () => {
     const handleImageLoadingFailed = () => {
         setImageError(false)
     }
-    
+
     const getUser = useCallback(async (userId: string) => {
         setLoading(true)
         try {
@@ -39,15 +39,15 @@ const UserProfile = () => {
         }
         setLoading(false)
         //eslint-disable-next-line
-    },[])
+    }, [])
 
     useEffect(() => {
         if (id && navigator.onLine) {
             getUser(id)
         }
-    }, [id,getUser])
-    
-    return ( 
+    }, [id, getUser])
+
+    return (
         <section>
             {
                 (!loading && user) && <div>
@@ -66,6 +66,11 @@ const UserProfile = () => {
                                     <FaLocationDot className="text-xl" /> {user.location}
                                 </div>
                             </div>
+                            {
+                                isAdmin && <div>
+                                    <button onClick={() => navigate(`/users/login-history/${user._id}`)} className='py-1 px-2 rounded bg-blue-500 text-sm text-stone-50'>Login History</button>
+                                </div>
+                            }
                         </div>
                         {
                             isAdmin && <div>
@@ -98,15 +103,16 @@ const UserProfile = () => {
                                     {user.about}
                                 </p>
                             </div>
+
                         </div>
                         <div className="space-y-2">
                             <h2 className="text-2xl ">Badges</h2>
                             <div className="space-y-3 sm:space-y-0 sm:flex gap-2 ">
                                 {
-                                    user.badges && user.badges.map(badge => <BadgeCard  key={badge.name} badge={badge} />)
+                                    user.badges && user.badges.map(badge => <BadgeCard key={badge.name} badge={badge} />)
                                 }
                             </div>
-                            <div>Learn how to earn <span onClick={()=>navigate('/users/reputation-and-badge')} role='link' className='text-blue-500 cursor-pointer'>badge</span> and <span onClick={()=>navigate('/users/reputation-and-badge')} role='link' className='text-blue-500 cursor-pointer'>reputation</span>.</div>
+                            <div>Learn how to earn <span onClick={() => navigate('/users/reputation-and-badge')} role='link' className='text-blue-500 cursor-pointer'>badge</span> and <span onClick={() => navigate('/users/reputation-and-badge')} role='link' className='text-blue-500 cursor-pointer'>reputation</span>.</div>
                         </div>
                     </div>
                     <div className="space-y-2">
@@ -126,12 +132,12 @@ const UserProfile = () => {
                     </div>
                 </div>
             }
-            
+
             {
-                loading && <Loading/>
+                loading && <Loading />
             }
             {
-                (!loading && !user && !navigator.onLine) && <NoInternet/>
+                (!loading && !user && !navigator.onLine) && <NoInternet />
             }
 
 

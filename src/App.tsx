@@ -24,6 +24,7 @@ import Login from "./pages/Login"
 import Users from "./pages/Users"
 import Home from "./pages/Home"
 import Tags from "./pages/Tags"
+import Companies from "./pages/Companies"
 
 const EditUserProfile = lazy(() => import("./components/users/EditUserProfile"))
 const AllQuestions = lazy(() => import("./components/Questions/AllQuestions"));
@@ -120,7 +121,7 @@ const App = () => {
           <Route path="/video" element={<Suspense fallback={<Loading />} ><Video /></Suspense>} />
           <Route path="/voip" element={<Suspense fallback={<Loading />} ><VoipWrapper /></Suspense>} />
           <Route path="/call/:callId/:callType/:callToken/:reciverFuid?/:reciverName?" element={<Suspense fallback={<Loading />} ><Call /></Suspense>} />
-
+          <Route path="/companies" element={<Companies/>} />
         </Routes>
       </Router>
     </main>
