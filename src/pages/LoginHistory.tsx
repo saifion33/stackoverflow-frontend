@@ -18,7 +18,7 @@ const LoginHistory = () => {
         setLoading(true);
         getLoginHistoryApi()
             .then(res => {
-                setLoginHistory(res.data.loginHistory)
+                setLoginHistory(res.data.loginHistory.reverse());
             })
             .catch(err => {
                 console.log(err)
@@ -52,7 +52,7 @@ const LoginHistory = () => {
             }
             {
                 (!user && !loading) && <div>
-                    Please login s.
+                    Please login.
                 </div>
             }
         </div>
