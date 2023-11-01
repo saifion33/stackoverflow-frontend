@@ -19,7 +19,7 @@ const Avatar = ({ user }: IProps) => {
                 }</p>
             }
             {
-                (user.imageUrl && isImageError) && <img onError={handleImageError} src={user.imageUrl} alt={user.displayName} />
+                (user.imageUrl && isImageError) && <img className="min-w-[30px]" onError={handleImageError} src={user.imageUrl} alt={user.displayName} />
             }
         </div>
     )
