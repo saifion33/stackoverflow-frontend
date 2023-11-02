@@ -195,7 +195,7 @@ const Video = () => {
                 <label className="absolute top-10 right-4 z-50 bg-customOrange text-stone-50 py-1 px-2 rounded flex items-center gap-1" htmlFor="select-video">Select Video <AiFillPlayCircle /></label>
                 <input className="hidden" onChange={handleSelectVideo} type="file" name="select-video" id="select-video" accept="video/*" multiple={false} />
                 {(buffring || isLoading) && <div className="text-7xl animate-spin text-stone-50 p-3 absolute "><AiOutlineLoading3Quarters /></div>}
-                <video onClick={handlePlayerClick} className="w-full " ref={videoRef} src={videoUrl} ></video>
+                <video onDoubleClick={handlePlayerClick} className="w-full " ref={videoRef} src={videoUrl} ></video>
                 <div className="absolute bottom-0 left-0 w-full bg-opacity-50  flex justify-center items-end gap-3">
                     {
                         !isLoading && <div className="my-5 flex flex-col justify-center items-center bg-slate-800 bg-opacity-50 w-full">
