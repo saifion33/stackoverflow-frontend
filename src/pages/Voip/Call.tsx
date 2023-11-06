@@ -76,9 +76,9 @@ const Call = () => {
     const token = useRef("");
 
     const joinChannel = useCallback(async () => {
-        if (!channel.current) {
-            channel.current = "react-room";
-        }
+        // if (!channel.current) {
+        //     channel.current = "react-room";
+        // }
 
         if (isJoined) {
             await leaveChannel();
@@ -86,7 +86,7 @@ const Call = () => {
 
         client.on("user-published", onUserPublish);
         client.on("user-joined", (user) => {
-            const remoteAudioTracks= user.audioTrack || null;
+            const remoteAudioTracks = user.audioTrack || null;
             setRemoteAudioTracks(remoteAudioTracks);
         })
 
@@ -146,14 +146,13 @@ const Call = () => {
             setIsAudioOn(true);
             if (!isJoined) {
                 joinChannel().then(async () => {
-                    await client.publish(videoTrack);
-                    await client.publish(audioTrack);
+                  await client.publish(audioTrack);
                 })
             }
-            if (!callType.includes('/audio')) {
-                const newUrl = window.location.pathname.replace('/video', '/audio');
-                navigate(newUrl);
-            }
+            // if (!callType.includes('/audio')) {
+            //     const newUrl = window.location.pathname.replace('/video', '/audio');
+            //     navigate(newUrl);
+            // }
         }
 
 
@@ -190,7 +189,7 @@ const Call = () => {
         if (remoteAudioTracks?.isPlaying) {
             remoteAudioTracks.stop();
             setIsSpeakerOn(false);
-        }else{
+        } else {
             remoteAudioTracks?.play();
             setIsSpeakerOn(true);
         }
@@ -231,24 +230,59 @@ const Call = () => {
         if (callToken && callId && callType) {
             channel.current = callId;
             token.current = callToken;
-            joinCall(callType)
+            joinCall(callType).then(() => {
+                onValue(onGoingCallRef, async (snap) => {
+                    console.log('value is changing ............', snap.val());
+                    if (snap.exists()) {
+                        if (snap.val().callState === 'hang') {
+                            set(onGoingCallRef, null);
+                            set(statusRef, 'idle');
+                            leaveChannel().then(() => {
+                                turnOnMicrophone(false).catch(err => console.error(err));
+                                turnOnCamera(false).then(async () => {
+                                    navigate('/voip')
+                                    window.location.reload();
+                                }).catch(err => console.error(err));
+                            })
+                            return
+                        }
+
+                        if (snap.val().callType === 'video') {
+                            await turnOnCamera(true);
+                            await client.publish(videoTrack);
+                            setIsVideoOn(true);
+                            const newUrl = window.location.pathname.replace('/audio', '/video');
+                            navigate(newUrl, { replace: true });
+                        } else if (snap.val().callType === 'audio') {
+                            await turnOnCamera(false);
+                            setIsVideoOn(false);
+                            await client.unpublish(videoTrack);
+                            await turnOnMicrophone(true);
+                            await client.publish(audioTrack);
+                            const newUrl = window.location.pathname.replace('/video', '/audio');
+                            navigate(newUrl, { replace: true });
+                        }
+                        setcallType(snap.val().callType)
+                    }
+                })
+            })
 
             if (reciverFuid) {
                 onValue(callRequestRef, (snap) => {
                     if (snap.exists()) {
                         if (snap.val().callState === 'default') {
                             toast.info('calling...', { autoClose: 1000 })
-                            setTimeout(async() => {
-                                const onGoingCall=await get(onGoingCallRef).then((snap)=>snap.exists())
+                            setTimeout(async () => {
+                                const onGoingCall = await get(onGoingCallRef).then((snap) => snap.exists())
                                 if (!onGoingCall) {
-                                    toast.warning('User not Answering.....',{autoClose:1000})
-                                    leaveChannel().then(()=>{
+                                    toast.warning('User not Answering.....', { autoClose: 1000 })
+                                    leaveChannel().then(() => {
                                         navigate('/voip')
                                     })
                                 }
-                            }, 1000*30);
+                            }, 1000 * 30);
                         } else if (snap.val().callState === 'accepted') {
-                            set(statusRef,'busy');
+                            set(statusRef, 'busy');
                             toast.success('call Accepted', { autoClose: 1500 })
                         } else if (snap.val().callState === 'declined') {
                             set(onGoingCallRef, null);
@@ -266,50 +300,16 @@ const Call = () => {
                 })
             }
 
-            onValue(onGoingCallRef, async (snap) => {
-                console.log(snap.val());
-                if (snap.exists()) {
-                    if (snap.val().callState === 'hang') {
-                        set(onGoingCallRef, null);
-                        set(statusRef, 'idle');
-                        leaveChannel().then(() => {
-                            turnOnMicrophone(false).catch(err => console.error(err));
-                            turnOnCamera(false).then(async () => {
-                                navigate('/voip')
-                                window.location.reload();
-                            }).catch(err => console.error(err));
-                        })
-                        return
-                    }
-
-                    if (snap.val().callType === 'video') {
-                        await turnOnCamera(true);
-                        await client.publish(videoTrack);
-                        setIsVideoOn(true);
-                        const newUrl = window.location.pathname.replace('/audio', '/video');
-                        navigate(newUrl, { replace: true });
-                    } else if (snap.val().callType === 'audio') {
-                        await turnOnCamera(false);
-                        setIsVideoOn(false);
-                        await client.unpublish(videoTrack);
-                        await turnOnMicrophone(true);
-                        await client.publish(audioTrack);
-                        const newUrl = window.location.pathname.replace('/video', '/audio');
-                        navigate(newUrl, { replace: true });
-                    }
-                    setcallType(snap.val().callType)
-                }
-            })
         }
-       
+
         return () => {
             off(child(onGoingCallRef, '/callType'))
             off(onGoingCallRef)
             off(callRequestRef);
         }
 
-        
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
