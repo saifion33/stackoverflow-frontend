@@ -20,8 +20,8 @@ const NavContentBox = ({isOpenFromPage,onLinkClick}:IProps) => {
                     <CustomNavLink onOptionClick={onLinkClick} to="/tags">Tags</CustomNavLink>
                     <CustomNavLink onOptionClick={onLinkClick} to='/users'>Users</CustomNavLink>
                     <CustomNavLink onOptionClick={onLinkClick} to="/companies">Companies</CustomNavLink>
-                    <CustomNavLink onOptionClick={onLinkClick} to="/video">videos</CustomNavLink>
-                    <CustomNavLink onOptionClick={onLinkClick} to="/voip">VOIP</CustomNavLink>
+                    {/* <CustomNavLink onOptionClick={onLinkClick} to="/video">videos</CustomNavLink>
+                    <CustomNavLink onOptionClick={onLinkClick} to="/voip">VOIP</CustomNavLink> */}
                 </div>
             </div>
             <div className=' flex flex-col gap-2'>

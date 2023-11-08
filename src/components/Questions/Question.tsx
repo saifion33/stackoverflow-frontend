@@ -69,7 +69,7 @@ const Question = () => {
               </div>
             </div>
             <div>
-              <button className="bg-blue-500 text-stone-50 py-1 px-2 rounded">Ask Question</button>
+              <button onClick={()=>navigate('/questions/ask')} className="bg-blue-500 text-stone-50 py-1 px-2 rounded">Ask Question</button>
             </div>
           </header>
           <QuestionDetailsCard question={question} />
